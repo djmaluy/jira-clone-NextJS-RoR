@@ -5,7 +5,13 @@ import { z } from "zod";
 
 import { DottedSeparator } from "@/components/dotted-separator";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -19,32 +25,44 @@ import { routes } from "@/lib/routes";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 
-const signInFormSchema = z.object({
+const signUpFormSchema = z.object({
+  name: z.string().min(1, "Name is required"),
   email: z
     .string()
     .pipe(z.email({ message: "Please enter a valid email address" })),
-  password: z.string().min(1, "Required"),
+  password: z.string().min(8, "Minimum 8 characters"),
 });
 
-export const SignInCard = () => {
-  const { login } = useAuth();
+export const SignUpCard = () => {
+  const { signUp } = useAuth();
 
-  const form = useForm<z.infer<typeof signInFormSchema>>({
-    resolver: zodResolver(signInFormSchema),
+  const form = useForm<z.infer<typeof signUpFormSchema>>({
+    resolver: zodResolver(signUpFormSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof signInFormSchema>) => {
-    login(data);
+  const onSubmit = (data: z.infer<typeof signUpFormSchema>) => {
+    signUp(data);
   };
 
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
-      <CardHeader className="flex items-center justify-center text-center p-7">
-        <CardTitle className="text-2xl">Welcome back!</CardTitle>
+      <CardHeader className="flex flex-col items-center justify-center text-center p-7">
+        <CardTitle className="text-2xl">Sign Up</CardTitle>
+        <CardDescription>
+          By signin up, you agree to our{" "}
+          <Link href="/privacy">
+            <span className="text-blue-700">Privacy Policy</span>
+          </Link>{" "}
+          and{" "}
+          <Link href="/terms">
+            <span className="text-blue-700">Terms of Service</span>
+          </Link>
+        </CardDescription>
       </CardHeader>
       <div className="px-7">
         <DottedSeparator />
@@ -53,13 +71,29 @@ export const SignInCard = () => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
+              name="name"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Enter your name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
               name="email"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
-                      type="email"
+                      type="text"
                       placeholder="Enter email address"
                       {...field}
                     />
@@ -84,9 +118,8 @@ export const SignInCard = () => {
                 </FormItem>
               )}
             />
-
             <Button size="lg" className="w-full">
-              Login
+              Sign up
             </Button>
           </form>
         </Form>
@@ -109,9 +142,9 @@ export const SignInCard = () => {
       </div>
       <CardContent className="p-7 flex items-center justify-center">
         <p>
-          Don&apos;t have an account?
-          <Link href={routes.SIGN_UP} className="text-blue-700 ">
-            &nbsp;Sign up
+          Already have an account?
+          <Link href={routes.SIGN_IN} className="text-blue-700 ">
+            &nbsp;Sign in
           </Link>
         </p>
       </CardContent>
