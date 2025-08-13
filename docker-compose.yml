@@ -1,0 +1,27 @@
+services:
+  postgres:
+    container_name: db
+    image: postgres:13.13
+    volumes:
+      - ./api/tmp/log:/var/log/postgresql
+      - ./api/tmp/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: api_development
+  api:
+    container_name: backend
+    depends_on:
+      - postgres
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    entrypoint: ["./entrypoint.sh"]
+    volumes:
+      - ./api:/api
+    ports:
+      - 4000:4000
+    stdin_open: true
+    tty: true
