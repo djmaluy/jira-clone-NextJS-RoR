@@ -1,3 +1,5 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -15,8 +17,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 const signInFormSchema = z.object({
@@ -27,7 +31,8 @@ const signInFormSchema = z.object({
 });
 
 export const SignInCard = () => {
-  const { login } = useAuth();
+  const { login, isLoginPending } = useAuth();
+  const { user } = useCurrentUser();
 
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
@@ -40,6 +45,8 @@ export const SignInCard = () => {
   const onSubmit = (data: z.infer<typeof signInFormSchema>) => {
     login(data);
   };
+
+  if (user) redirect("/");
 
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
@@ -85,7 +92,7 @@ export const SignInCard = () => {
               )}
             />
 
-            <Button size="lg" className="w-full">
+            <Button disabled={isLoginPending} size="lg" className="w-full">
               Login
             </Button>
           </form>
@@ -95,11 +102,21 @@ export const SignInCard = () => {
         <DottedSeparator />
       </div>
       <CardContent className="p-7 flex flex-col gap-y-5">
-        <Button variant="secondary" size="lg" className="w-full">
+        <Button
+          disabled={isLoginPending}
+          variant="secondary"
+          size="lg"
+          className="w-full"
+        >
           <FcGoogle className="size-5 mr-2" />
           Login with Google
         </Button>
-        <Button variant="secondary" size="lg" className="w-full">
+        <Button
+          disabled={isLoginPending}
+          variant="secondary"
+          size="lg"
+          className="w-full"
+        >
           <FaGithub className="size-5 mr-2" />
           Login with Github
         </Button>

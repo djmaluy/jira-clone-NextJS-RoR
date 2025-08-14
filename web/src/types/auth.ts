@@ -8,3 +8,9 @@ export type TSignUpCredentials = {
   email: string;
   password: string;
 };
+
+export type TUser = {
+  id: number;
+  email: string;
+  name: string;
+};

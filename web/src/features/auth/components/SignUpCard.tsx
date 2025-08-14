@@ -1,3 +1,5 @@
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -21,8 +23,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 const signUpFormSchema = z.object({
@@ -34,7 +38,8 @@ const signUpFormSchema = z.object({
 });
 
 export const SignUpCard = () => {
-  const { signUp } = useAuth();
+  const { signUp, isSignUpPending } = useAuth();
+  const { user } = useCurrentUser();
 
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
@@ -48,6 +53,8 @@ export const SignUpCard = () => {
   const onSubmit = (data: z.infer<typeof signUpFormSchema>) => {
     signUp(data);
   };
+
+  if (user) redirect("/");
 
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
@@ -118,7 +125,7 @@ export const SignUpCard = () => {
                 </FormItem>
               )}
             />
-            <Button size="lg" className="w-full">
+            <Button disabled={isSignUpPending} size="lg" className="w-full">
               Sign up
             </Button>
           </form>
@@ -128,11 +135,21 @@ export const SignUpCard = () => {
         <DottedSeparator />
       </div>
       <CardContent className="p-7 flex flex-col gap-y-5">
-        <Button variant="secondary" size="lg" className="w-full">
+        <Button
+          disabled={isSignUpPending}
+          variant="secondary"
+          size="lg"
+          className="w-full"
+        >
           <FcGoogle className="size-5 mr-2" />
           Login with Google
         </Button>
-        <Button variant="secondary" size="lg" className="w-full">
+        <Button
+          disabled={isSignUpPending}
+          variant="secondary"
+          size="lg"
+          className="w-full"
+        >
           <FaGithub className="size-5 mr-2" />
           Login with Github
         </Button>

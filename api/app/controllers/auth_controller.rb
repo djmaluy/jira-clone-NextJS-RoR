@@ -24,7 +24,7 @@ class AuthController < ApplicationController
 
   def current
     if current_user
-      render json: { user: user_response(current_user)}, status: :ok
+      render json: { id: current_user.id, email: current_user.email, name: current_user.name }, status: :ok
     else
       render json: { error: 'Unauthorized' }, status: :unauthorized
     end
@@ -42,11 +42,6 @@ class AuthController < ApplicationController
   end
 
   def user_response(user)
-    {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      created_at: user.created_at
-    }
+    { id: user.id, email: user.email, name: user.name }
   end
 end

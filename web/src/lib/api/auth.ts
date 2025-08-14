@@ -1,4 +1,4 @@
-import { TLoginCredentials, TSignUpCredentials } from "@/types/auth";
+import { TLoginCredentials, TSignUpCredentials, TUser } from "@/types/auth";
 import { api } from "../api";
 
 export const authApi = {
@@ -11,7 +11,7 @@ export const authApi = {
     return response.data;
   },
   current: async () => {
-    const response = await api.get("/auth/current");
+    const response = await api.get<TUser>("/auth/current");
     return response.data;
   },
   logout: async () => {

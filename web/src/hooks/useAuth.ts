@@ -1,8 +1,9 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+
 import { authApi } from "@/lib/api/auth";
 import { routes } from "@/lib/routes";
 import { TLoginCredentials, TSignUpCredentials } from "@/types/auth";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 export function useAuth() {
   const queryClient = useQueryClient();
@@ -25,8 +26,7 @@ export function useAuth() {
   const logout = useMutation({
     mutationFn: () => authApi.logout(),
     onSuccess: () => {
-      queryClient.setQueryData(["current-user"], null);
-      queryClient.invalidateQueries({ queryKey: ["current-user"] });
+      queryClient.clear();
       router.push(routes.SIGN_IN);
     },
   });
@@ -34,6 +34,8 @@ export function useAuth() {
   return {
     signUp: signUp.mutate,
     login: login.mutate,
+    isLoginPending: login.isPending,
+    isSignUpPending: signUp.isPending,
     logout: logout.mutate,
   };
 }
