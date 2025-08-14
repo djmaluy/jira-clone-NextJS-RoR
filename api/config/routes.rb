@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   scope :api, defaults: { format: :json } do
-    resources :users
+    resources :workspaces, only: %i[create]
+
     post 'auth/sign_up', to: 'auth#sign_up'
     post 'auth/login', to: 'auth#login'
     delete 'auth/logout', to: 'auth#logout'

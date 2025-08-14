@@ -22,12 +22,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/hooks/useAuth";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useCurrentUser } from "@/features/auth/actions/useCurrentUser";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useSignUp } from "../actions/useSignUp";
 
 const signUpFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -38,7 +38,7 @@ const signUpFormSchema = z.object({
 });
 
 export const SignUpCard = () => {
-  const { signUp, isSignUpPending } = useAuth();
+  const { mutate: signUp, isPending } = useSignUp();
   const { user } = useCurrentUser();
 
   const form = useForm<z.infer<typeof signUpFormSchema>>({
@@ -125,7 +125,7 @@ export const SignUpCard = () => {
                 </FormItem>
               )}
             />
-            <Button disabled={isSignUpPending} size="lg" className="w-full">
+            <Button disabled={isPending} size="lg" className="w-full">
               Sign up
             </Button>
           </form>
@@ -136,7 +136,7 @@ export const SignUpCard = () => {
       </div>
       <CardContent className="p-7 flex flex-col gap-y-5">
         <Button
-          disabled={isSignUpPending}
+          disabled={isPending}
           variant="secondary"
           size="lg"
           className="w-full"
@@ -145,7 +145,7 @@ export const SignUpCard = () => {
           Login with Google
         </Button>
         <Button
-          disabled={isSignUpPending}
+          disabled={isPending}
           variant="secondary"
           size="lg"
           className="w-full"

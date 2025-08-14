@@ -4,6 +4,7 @@ import { api } from "../api";
 export const authApi = {
   login: async (credentials: TLoginCredentials) => {
     const response = await api.post("/auth/login", credentials);
+
     return response.data;
   },
   signUp: async (data: TSignUpCredentials) => {

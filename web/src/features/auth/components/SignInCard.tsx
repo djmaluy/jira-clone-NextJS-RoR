@@ -16,12 +16,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuth } from "@/hooks/useAuth";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useCurrentUser } from "@/features/auth/actions/useCurrentUser";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useLogin } from "../actions/useLogin";
 
 const signInFormSchema = z.object({
   email: z
@@ -31,7 +31,7 @@ const signInFormSchema = z.object({
 });
 
 export const SignInCard = () => {
-  const { login, isLoginPending } = useAuth();
+  const { mutate: login, isPending } = useLogin();
   const { user } = useCurrentUser();
 
   const form = useForm<z.infer<typeof signInFormSchema>>({
@@ -92,7 +92,7 @@ export const SignInCard = () => {
               )}
             />
 
-            <Button disabled={isLoginPending} size="lg" className="w-full">
+            <Button disabled={isPending} size="lg" className="w-full">
               Login
             </Button>
           </form>
@@ -103,7 +103,7 @@ export const SignInCard = () => {
       </div>
       <CardContent className="p-7 flex flex-col gap-y-5">
         <Button
-          disabled={isLoginPending}
+          disabled={isPending}
           variant="secondary"
           size="lg"
           className="w-full"
@@ -112,7 +112,7 @@ export const SignInCard = () => {
           Login with Google
         </Button>
         <Button
-          disabled={isLoginPending}
+          disabled={isPending}
           variant="secondary"
           size="lg"
           className="w-full"

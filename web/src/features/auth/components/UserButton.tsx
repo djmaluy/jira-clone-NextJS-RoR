@@ -9,12 +9,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useAuth } from "@/hooks/useAuth";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useCurrentUser } from "@/features/auth/actions/useCurrentUser";
 import { Loader, LogOut } from "lucide-react";
+import { useLogout } from "../actions/useLogout";
 
 export const UserButton = () => {
-  const { logout } = useAuth();
+  const { mutate: logout } = useLogout();
   const { user, isPending } = useCurrentUser();
 
   if (isPending || !user) {

@@ -40,8 +40,4 @@ class AuthController < ApplicationController
   def user_params
     params.require(:user).permit(:email, :password, :name)
   end
-
-  def user_response(user)
-    { id: user.id, email: user.email, name: user.name }
-  end
 end
