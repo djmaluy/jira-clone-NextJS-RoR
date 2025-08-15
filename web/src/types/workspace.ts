@@ -1,6 +1,7 @@
 export type TWorkspace = {
-  id?: number;
+  id: number;
   name: string;
+  image?: string;
 };
 
 export type TWorkspaceReq = {

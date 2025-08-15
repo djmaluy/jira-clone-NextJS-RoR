@@ -1,4 +1,10 @@
 class WorkspacesController < ApplicationController
+  def index
+    workspaces = current_user.workspaces
+
+    render json: workspaces, status: :ok
+  end
+
   def create
     workspace = current_user.workspaces.new(workspace_params.except(:image))
     

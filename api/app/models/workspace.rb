@@ -1,6 +1,8 @@
 class Workspace < ApplicationRecord
   include Base64Image
   
+  default_scope { order(created_at: :desc) }
+
   belongs_to :user
   has_one_attached :image
   validates :name, presence: true

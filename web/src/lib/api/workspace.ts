@@ -6,4 +6,8 @@ export const workspaceApi = {
     const response = await api.post("/workspaces", data);
     return response.data;
   },
+  fetchAll: async () => {
+    const response = await api.get("/workspaces");
+    return response.data;
+  },
 };
