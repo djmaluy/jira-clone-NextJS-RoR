@@ -3,7 +3,7 @@ class AuthController < ApplicationController
 
   def sign_up
     user = User.new(user_params)
-
+    #  @TODO add email confirm 
     if user.save
       render json: { message: 'Successfully created' }, status: :created
     else

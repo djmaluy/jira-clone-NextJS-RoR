@@ -1,9 +1,13 @@
 class WorkspacesController < ApplicationController
   def create
-    workspace = current_user.workspaces.new(workspace_params)
+    workspace = current_user.workspaces.new(workspace_params.except(:image))
+    
+    if params[:workspace][:image].present?
+      workspace.attach_base64_image(:image, params[:workspace][:image])
+    end
 
     if workspace.save
-      render json: { id: workspace.id, name: workspace.name }, status: :created
+      render json: { message: "Successfully created" }, status: :created
     else
       render json: { errors: workspace.errors.full_messages }, status: :unprocessable_entity
     end
@@ -13,6 +17,6 @@ class WorkspacesController < ApplicationController
   private
 
   def workspace_params
-    params.require(:workspace).permit(:name)
+    params.require(:workspace).permit(:name, :image)
   end
 end
