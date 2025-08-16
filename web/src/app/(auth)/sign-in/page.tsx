@@ -1,7 +1,7 @@
 import { SignInCard } from "@/features/auth/components/SignInCard";
 
-function SignIn() {
+const SignIn = () => {
   return <SignInCard />;
-}
+};
 
 export default SignIn;

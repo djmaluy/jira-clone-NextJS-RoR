@@ -9,9 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useCurrentUser } from "@/features/auth/actions/useCurrentUser";
+import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
 import { Loader, LogOut } from "lucide-react";
-import { useLogout } from "../actions/useLogout";
+import { useLogout } from "../hooks/useLogout";
 
 export const UserButton = () => {
   const { mutate: logout } = useLogout();

@@ -26,7 +26,7 @@ class AuthController < ApplicationController
     if current_user
       render json: { id: current_user.id, email: current_user.email, name: current_user.name }, status: :ok
     else
-      render json: { error: 'Unauthorized' }, status: :unauthorized
+      head :unauthorized
     end
   end
 

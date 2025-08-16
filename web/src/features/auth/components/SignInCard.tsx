@@ -16,12 +16,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useCurrentUser } from "@/features/auth/actions/useCurrentUser";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useLogin } from "../actions/useLogin";
+import { useLogin } from "../hooks/useLogin";
 
 const signInFormSchema = z.object({
   email: z
@@ -32,7 +30,6 @@ const signInFormSchema = z.object({
 
 export const SignInCard = () => {
   const { mutate: login, isPending } = useLogin();
-  const { user } = useCurrentUser();
 
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
@@ -45,8 +42,6 @@ export const SignInCard = () => {
   const onSubmit = (data: z.infer<typeof signInFormSchema>) => {
     login(data);
   };
-
-  if (user) redirect("/");
 
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">

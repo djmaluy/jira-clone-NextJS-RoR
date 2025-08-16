@@ -20,7 +20,7 @@ import Image from "next/image";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useCreateWorkspace } from "../actions/useCreateWorkspace";
+import { useCreateWorkspace } from "../hooks/useCreateWorkspace";
 
 type TCreateWorkspaceForm = {
   onCancel: () => void;

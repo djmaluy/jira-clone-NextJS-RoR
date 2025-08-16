@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-import { authApi } from "@/lib/api/auth";
 import { routes } from "@/lib/routes";
 import { TLoginCredentials } from "@/types/auth";
 import { toast } from "sonner";
+import { authApi } from "../api/authApi";
 
 export function useLogin() {
   const router = useRouter();

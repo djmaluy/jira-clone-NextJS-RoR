@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { workspaceApi } from "@/lib/api/workspace";
 import { TWorkspaceReq } from "@/types/workspace";
+import { workspaceApi } from "../api/workspaceApi";
 
 export function useCreateWorkspace() {
   const queryClient = useQueryClient();

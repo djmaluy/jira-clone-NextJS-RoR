@@ -22,12 +22,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useCurrentUser } from "@/features/auth/actions/useCurrentUser";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { useSignUp } from "../actions/useSignUp";
+import { useSignUp } from "../hooks/useSignUp";
 
 const signUpFormSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -39,7 +37,6 @@ const signUpFormSchema = z.object({
 
 export const SignUpCard = () => {
   const { mutate: signUp, isPending } = useSignUp();
-  const { user } = useCurrentUser();
 
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
@@ -53,8 +50,6 @@ export const SignUpCard = () => {
   const onSubmit = (data: z.infer<typeof signUpFormSchema>) => {
     signUp(data);
   };
-
-  if (user) redirect("/");
 
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">

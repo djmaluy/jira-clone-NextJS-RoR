@@ -2,9 +2,11 @@
 
 import { RiAddCircleFill } from "react-icons/ri";
 
-import { useFetchWorkspaces } from "@/features/workspaces/actions/useFetchWorkspaces";
 import { WorkspaceAvatar } from "@/features/workspaces/components/workspace_avatar";
+import { useFetchWorkspaces } from "@/features/workspaces/hooks/useFetchWorkspaces";
+import { routes } from "@/lib/routes";
 import { TWorkspace } from "@/types/workspace";
+import { useParams, useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -15,6 +17,12 @@ import {
 
 export const WorkspaceSwitcher = () => {
   const { workspaces } = useFetchWorkspaces();
+  const params = useParams();
+  const router = useRouter();
+
+  const onSelect = (id: string) => {
+    router.push(`${routes.WORKSPACES}/${id}`);
+  };
 
   return (
     <div className="flex flex-col gap-y-2">
@@ -22,7 +30,7 @@ export const WorkspaceSwitcher = () => {
         <p className="text-xs uppercase text-neutral-500"> Workspaces</p>
         <RiAddCircleFill className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition" />
       </div>
-      <Select>
+      <Select onValueChange={onSelect} value={params.workspaceId as string}>
         <SelectTrigger className="w-full bg-neutral-200 font-medium p-1">
           <SelectValue placeholder="No workspace selected" />
         </SelectTrigger>
