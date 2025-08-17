@@ -1,11 +1,13 @@
-"use client";
+import { serverApi } from "@/lib/serverClient";
+import { redirect } from "next/navigation";
 
-import { CreateWorkspaceForm } from "@/features/workspaces/components/create-workspace-form";
+export default async function Home() {
+  const api = await serverApi();
+  const { data: workspaces } = await api.get("/workspaces");
 
-export default function Home() {
-  return (
-    <div className="bg-neutral-500 p-4 h-full">
-      <CreateWorkspaceForm onCancel={() => console.log("click")} />
-    </div>
-  );
+  if (workspaces.length === 0) {
+    redirect("workspaces/create");
+  } else {
+    redirect(`workspaces/${workspaces[0]?.id}`);
+  }
 }

@@ -9,15 +9,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useCurrentUser } from "@/features/auth/hooks/useCurrentUser";
+import { useCurrent } from "@/providers/AuthProvider";
 import { Loader, LogOut } from "lucide-react";
 import { useLogout } from "../hooks/useLogout";
 
 export const UserButton = () => {
   const { mutate: logout } = useLogout();
-  const { user, isPending } = useCurrentUser();
+  const { user, loading } = useCurrent();
 
-  if (isPending || !user) {
+  if (loading || !user) {
     return (
       <div className="size-10 rounded-full flex items-center justify-center bg-neutral-200 border border-neutral-300">
         <Loader className="size-4 animate-spin text-muted-foreground" />

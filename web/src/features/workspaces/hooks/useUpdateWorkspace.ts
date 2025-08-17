@@ -3,21 +3,23 @@ import { toast } from "sonner";
 
 import { TWorkspaceReq } from "@/types/workspace";
 import { useRouter } from "next/navigation";
-import { createWorkspace } from "../api/workspaceApi";
+import { updateWorkspace } from "../api/workspaceApi";
 
-export function useCreateWorkspace() {
+export function useUpdateWorkspace() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (data: TWorkspaceReq) => createWorkspace(data),
+    mutationFn: ({ data, id }: { data: TWorkspaceReq; id: number }) =>
+      updateWorkspace(data, id),
     onSuccess: (workspace) => {
-      toast.success("Successfully created workspace!");
+      toast.success("Successfully updated workspace!");
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace", workspace.id] });
       router.push(`/workspaces/${workspace.id}`);
     },
     onError: () => {
-      toast.error("Failed to create workspace!");
+      toast.error("Failed to update workspace!");
     },
   });
 }

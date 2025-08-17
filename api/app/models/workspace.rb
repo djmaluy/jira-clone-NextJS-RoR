@@ -7,6 +7,8 @@ class Workspace < ApplicationRecord
   has_one_attached :image
   validates :name, presence: true
 
+  before_create :generate_invitational_code
+
   def image_url
     return nil unless image.attached?
     
@@ -15,5 +17,12 @@ class Workspace < ApplicationRecord
     else
       Rails.application.routes.url_helpers.url_for(image)
     end
+  end
+
+  private
+
+  def generate_invitational_code
+    charset = Array('A'..'Z') + Array('a'..'z') + Array('0'..'9')
+    self.invitational_code ||= Array.new(8) { charset.sample }.join
   end
 end

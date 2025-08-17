@@ -1,11 +1,13 @@
+import { fetchAllWorkspaces } from "@/features/workspaces/api/workspaceApi";
 import { useQuery } from "@tanstack/react-query";
-
-import { workspaceApi } from "@/features/workspaces/api/workspaceApi";
 
 export function useFetchWorkspaces() {
   const { data, isPending, isError } = useQuery({
     queryKey: ["workspaces"],
-    queryFn: workspaceApi.fetchAll,
+    queryFn: async () => {
+      const response = await fetchAllWorkspaces();
+      return response;
+    },
   });
 
   return {

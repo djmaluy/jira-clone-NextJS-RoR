@@ -3,15 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { authApi } from "../api/authApi";
 
 export function useCurrentUser() {
-  const { data, isPending, isError } = useQuery<TUser | null>({
+  const { data, isPending, isError } = useQuery<TUser>({
     queryKey: ["current"],
-    queryFn: authApi.current,
-    retry: (failureCount, error) => {
-      if (error?.message?.includes("401")) {
-        return false;
-      }
-      return failureCount < 2;
+    queryFn: async () => {
+      const response = await authApi.current();
+      return response.data;
     },
+    retry: false,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
