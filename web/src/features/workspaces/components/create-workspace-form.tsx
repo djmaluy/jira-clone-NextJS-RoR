@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { fileToBase64 } from "@/lib/fileToBase64";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageIcon } from "lucide-react";
 import Image from "next/image";
@@ -168,6 +169,7 @@ export const CreateWorkspaceForm = ({ onCancel }: TCreateWorkspaceForm) => {
                 onClick={onCancel}
                 size="lg"
                 variant="secondary"
+                className={cn(!onCancel && "invisible")}
               >
                 Cancel
               </Button>
