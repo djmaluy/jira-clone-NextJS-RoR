@@ -23,7 +23,7 @@ import { z } from "zod";
 import { useCreateWorkspace } from "../hooks/useCreateWorkspace";
 
 type TCreateWorkspaceForm = {
-  onCancel: () => void;
+  onCancel?: () => void;
 };
 
 const newWorkspaceSchema = z.object({

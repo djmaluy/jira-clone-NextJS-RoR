@@ -1,9 +1,13 @@
-import request from "@/lib/apiClient";
+import { api } from "@/lib/apiClient";
 import { TWorkspace, TWorkspaceReq } from "@/types/workspace";
 
-export const workspaceApi = {
-  create: (data: TWorkspace | TWorkspaceReq) =>
-    request("/workspaces", { method: "POST", body: JSON.stringify(data) }),
+export const createWorkspace = async (data: TWorkspaceReq) => {
+  const res = await api.post<TWorkspace>("/workspaces", data);
+  return res.data;
+};
 
-  fetchAll: () => request("/workspaces"),
+export const fetchAllWorkspaces = async () => {
+  const res = await api.get<TWorkspace[]>("/workspaces");
+
+  return res.data;
 };
