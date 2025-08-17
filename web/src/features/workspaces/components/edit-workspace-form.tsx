@@ -15,20 +15,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { fileToBase64 } from "@/lib/fileToBase64";
 import { cn } from "@/lib/utils";
+import { TWorkspace } from "@/types/workspace";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ImageIcon } from "lucide-react";
+import { ArrowLeftIcon, ImageIcon } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useCreateWorkspace } from "../hooks/useCreateWorkspace";
+import { useUpdateWorkspace } from "../hooks/useUpdateWorkspace";
 
-type TCreateWorkspaceForm = {
+type TEditWorkspaceForm = {
   onCancel?: () => void;
+  initialValues: TWorkspace;
 };
 
-const newWorkspaceSchema = z.object({
-  name: z.string().min(1, "Required"),
+const updateWorkspaceSchema = z.object({
+  name: z.string().min(1, "Must be 1 or more characters"),
   image: z
     .union([
       z.instanceof(File),
@@ -37,18 +40,23 @@ const newWorkspaceSchema = z.object({
     .optional(),
 });
 
-export const CreateWorkspaceForm = ({ onCancel }: TCreateWorkspaceForm) => {
-  const { mutate: create, isPending } = useCreateWorkspace();
+export const EditWorkspaceForm = ({
+  onCancel,
+  initialValues,
+}: TEditWorkspaceForm) => {
+  const { mutate: update, isPending } = useUpdateWorkspace();
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
-  const form = useForm<z.infer<typeof newWorkspaceSchema>>({
-    resolver: zodResolver(newWorkspaceSchema),
+  const form = useForm<z.infer<typeof updateWorkspaceSchema>>({
+    resolver: zodResolver(updateWorkspaceSchema),
     defaultValues: {
-      name: "",
+      ...initialValues,
+      image: initialValues.image || "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof newWorkspaceSchema>) => {
+  const onSubmit = async (values: z.infer<typeof updateWorkspaceSchema>) => {
     let imageBase64 = "";
 
     if (values.image instanceof File) {
@@ -61,11 +69,14 @@ export const CreateWorkspaceForm = ({ onCancel }: TCreateWorkspaceForm) => {
         image: imageBase64,
       },
     };
-    create(preparedData, {
-      onSuccess: () => {
-        form.reset();
-      },
-    });
+    update(
+      { data: preparedData, id: initialValues.id },
+      {
+        onSuccess: () => {
+          form.reset();
+        },
+      }
+    );
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,11 +87,23 @@ export const CreateWorkspaceForm = ({ onCancel }: TCreateWorkspaceForm) => {
     }
   };
 
+  const onBackClick = () => {
+    if (onCancel) {
+      onCancel();
+    } else {
+      router.push(`/workspaces/${initialValues.id}`);
+    }
+  };
+
   return (
     <Card className="w-full h-full border-none shadow-none">
-      <CardHeader className="flex p-7">
+      <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
+        <Button variant="secondary" size="sm" onClick={onBackClick}>
+          <ArrowLeftIcon className="size-4 mr-2" />
+          Back
+        </Button>
         <CardTitle className="text-xl font-bold">
-          Create a new workspace
+          {initialValues.name}
         </CardTitle>
       </CardHeader>
       <div className="px-7">
@@ -197,7 +220,7 @@ export const CreateWorkspaceForm = ({ onCancel }: TCreateWorkspaceForm) => {
                 size="lg"
                 variant="primary"
               >
-                Create
+                Save changes
               </Button>
             </div>
           </form>

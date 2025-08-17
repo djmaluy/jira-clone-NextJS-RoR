@@ -9,6 +9,7 @@ export async function serverApi() {
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
       "Content-Type": "application/json",
+      Accept: "application/json",
       ...(jwtToken ? { Cookie: `jwt_token=${jwtToken}` } : {}),
     },
     withCredentials: true,
