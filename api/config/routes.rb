@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   scope :api, defaults: { format: :json } do
-    resources :workspaces
+    resources :workspaces do
+      member do
+        put :reset_invitation_code
+      end
+    end
 
     post 'auth/sign_up', to: 'auth#sign_up'
     post 'auth/login', to: 'auth#login'

@@ -1,5 +1,5 @@
 class WorkspacesController < ApplicationController
-  before_action :set_workspace, only: %i[show update destroy]
+  before_action :set_workspace, only: %i[show update destroy reset_invitation_code]
 
   def index
     @workspaces = current_user.workspaces
@@ -38,6 +38,16 @@ class WorkspacesController < ApplicationController
    def destroy
     @workspace.destroy
     head :no_content
+  end
+
+  def reset_invitation_code
+    @workspace.send(:generate_invitation_code)
+
+    if @workspace.save
+      render json: { invitation_code: @workspace.invitation_code }, status: :ok
+    else
+      render json: { errors: @workspace.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
 

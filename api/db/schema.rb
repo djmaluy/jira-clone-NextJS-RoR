@@ -55,7 +55,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_17_091212) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "invitational_code"
+    t.string "invitation_code"
     t.index ["user_id"], name: "index_workspaces_on_user_id"
   end
 

@@ -2,7 +2,7 @@ export type TWorkspace = {
   id: number;
   name: string;
   image?: string;
-  invitationalCode?: string;
+  invitationCode?: string;
   userId: number;
 };
 

@@ -21,7 +21,12 @@ export const getWorkspace = async (id: string) => {
   return res.data;
 };
 
-export const deleteWorkspace = async (id: string) => {
+export const deleteWorkspace = async (id: number) => {
   const res = await api.delete(`/workspaces/${id}`);
+  return res.data;
+};
+
+export const resetInvitationCode = async (id: number) => {
+  const res = await api.put(`/workspaces/${id}/reset_invitation_code`);
   return res.data;
 };

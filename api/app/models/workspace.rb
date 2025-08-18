@@ -21,8 +21,8 @@ class Workspace < ApplicationRecord
 
   private
 
-  def generate_invitational_code
+  def generate_invitation_code
     charset = Array('A'..'Z') + Array('a'..'z') + Array('0'..'9')
-    self.invitational_code ||= Array.new(8) { charset.sample }.join
+    self.invitation_code = Array.new(8) { charset.sample }.join
   end
 end
