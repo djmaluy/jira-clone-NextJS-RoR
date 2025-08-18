@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     resources :workspaces do
       member do
         put :reset_invitation_code
+        put :join
       end
     end
 

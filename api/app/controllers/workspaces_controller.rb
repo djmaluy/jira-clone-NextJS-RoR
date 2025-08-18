@@ -1,18 +1,19 @@
 class WorkspacesController < ApplicationController
-  before_action :set_workspace, only: %i[show update destroy reset_invitation_code]
+  before_action :set_workspace, only: %i[show update destroy reset_invitation_code join]
 
   def index
     @workspaces = current_user.workspaces
   end
 
   def create
-    workspace = current_user.workspaces.new(workspace_params.except(:image))
+    workspace = Workspace.new(workspace_params.except(:image))
     
     if params[:workspace][:image].present?
       workspace.attach_base64_image(:image, params[:workspace][:image])
     end
 
     if workspace.save
+      Membership.create!(user: current_user, workspace: workspace, role: :owner)
       render json: {id: workspace.id, message: "Successfully created" }, status: :created
     else
       render json: { errors: workspace.errors.full_messages }, status: :unprocessable_entity
@@ -37,6 +38,7 @@ class WorkspacesController < ApplicationController
 
    def destroy
     @workspace.destroy
+
     head :no_content
   end
 
@@ -50,6 +52,19 @@ class WorkspacesController < ApplicationController
     end
   end
 
+  def join
+    if @workspace.invitation_code == params[:invitation_code]
+      if @workspace.users.include?(current_user)
+        render json: { id: @workspace.id, message: "You are already a member of this workspace" }, status: :ok
+      else
+        @workspace.users << current_user
+        render json: { id: @workspace.id, message: "Joined successfully" }, status: :ok
+      end
+    else
+      render json: { message: "Invalid invite code" }, status: :unprocessable_entity
+    end
+  end
+
 
   private
 
@@ -58,6 +73,6 @@ class WorkspacesController < ApplicationController
   end
 
   def workspace_params
-    params.require(:workspace).permit(:name, :image)
+    params.require(:workspace).permit(:name, :image, :invitation_code)
   end
 end

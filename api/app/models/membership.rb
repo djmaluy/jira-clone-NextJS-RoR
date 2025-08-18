@@ -1,0 +1,6 @@
+class Membership < ApplicationRecord
+  belongs_to :user
+  belongs_to :workspace
+
+ enum :role, { owner: 0, member: 1, viewer: 2 }
+end

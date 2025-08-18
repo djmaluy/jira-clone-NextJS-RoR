@@ -1,13 +1,14 @@
 class Workspace < ApplicationRecord
   include Base64Image
-  
   default_scope { order(created_at: :desc) }
 
-  belongs_to :user
+  has_many :memberships, dependent: :destroy
+  has_many :users, through: :memberships
   has_one_attached :image
+  
   validates :name, presence: true
 
-  before_create :generate_invitational_code
+  before_create :generate_invitation_code
 
   def image_url
     return nil unless image.attached?
@@ -17,6 +18,10 @@ class Workspace < ApplicationRecord
     else
       Rails.application.routes.url_helpers.url_for(image)
     end
+  end
+
+  def owner
+    memberships.find_by(role: :owner)&.user
   end
 
   private
