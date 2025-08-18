@@ -12,18 +12,17 @@ type TWorkspaceIdSettingsPageProps = {
 const WorkspaceIdSettingsPage = async ({
   params,
 }: TWorkspaceIdSettingsPageProps) => {
+  const { workspaceId } = await params;
   const api = await serverApi();
-  const workspace = await api.get<TWorkspace>(
-    `/workspaces/${params.workspaceId}`
-  );
+  const workspace = await api.get<TWorkspace>(`/workspaces/${workspaceId}`);
 
   if (!workspace.data) {
-    redirect(`/workspaces/${params.workspaceId}`);
+    redirect(`/workspaces/${workspaceId}`);
   }
 
   return (
     <div className="w-full lg:max-w-xl">
-      <EditWorkspaceForm initialValues={workspace.data} />{" "}
+      <EditWorkspaceForm initialValues={workspace.data} />
     </div>
   );
 };

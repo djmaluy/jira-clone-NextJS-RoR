@@ -20,3 +20,8 @@ export const getWorkspace = async (id: string) => {
   const res = await api.get<TWorkspace>(`/workspaces/${id}`);
   return res.data;
 };
+
+export const deleteWorkspace = async (id: string) => {
+  const res = await api.delete(`/workspaces/${id}`);
+  return res.data;
+};

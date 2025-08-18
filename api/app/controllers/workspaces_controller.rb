@@ -1,5 +1,5 @@
 class WorkspacesController < ApplicationController
-  before_action :set_workspace, only: %i[show update]
+  before_action :set_workspace, only: %i[show update destroy]
 
   def index
     @workspaces = current_user.workspaces
@@ -33,6 +33,11 @@ class WorkspacesController < ApplicationController
 
   def show
     render :show, formats: :json, status: :ok
+  end
+
+   def destroy
+    @workspace.destroy
+    head :no_content
   end
 
 
