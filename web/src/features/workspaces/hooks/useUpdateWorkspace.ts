@@ -13,7 +13,7 @@ export function useUpdateWorkspace() {
     mutationFn: ({ data, id }: { data: TWorkspaceReq; id: number }) =>
       updateWorkspace(data, id),
     onSuccess: (workspace) => {
-      toast.success("Successfully updated workspace!");
+      toast.success("Successfully updated!");
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       queryClient.invalidateQueries({ queryKey: ["workspace", workspace.id] });
       router.push(`/workspaces/${workspace.id}`);

@@ -12,7 +12,7 @@ export function useCreateWorkspace() {
   return useMutation({
     mutationFn: (data: TWorkspaceReq) => createWorkspace(data),
     onSuccess: (workspace) => {
-      toast.success("Successfully created workspace!");
+      toast.success("Successfully created!");
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       router.push(`/workspaces/${workspace.id}`);
     },
