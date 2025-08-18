@@ -3,7 +3,6 @@ export type TWorkspace = {
   name: string;
   image?: string;
   invitationCode?: string;
-  userId: number;
 };
 
 export type TWorkspaceReq = {

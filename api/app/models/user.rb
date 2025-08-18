@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
-  has_many :workspaces, dependent: :destroy
+
+  has_many :memberships, dependent: :destroy
+  has_many :workspaces, through: :memberships
 
   validates :email, presence: true, 
                    uniqueness: { case_sensitive: false },
