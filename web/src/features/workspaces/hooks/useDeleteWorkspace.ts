@@ -10,7 +10,7 @@ export function useDeleteWorkspace() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (id: string) => deleteWorkspace(id),
+    mutationFn: (id: number) => deleteWorkspace(id),
     onSuccess: () => {
       toast.success("Successfully deleted!");
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
