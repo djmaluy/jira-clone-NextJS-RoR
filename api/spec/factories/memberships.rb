@@ -7,5 +7,9 @@ FactoryBot.define do
     trait :admin do
       role { :admin }
     end
+
+    trait :member do
+      role { :member }
+    end
   end
 end
