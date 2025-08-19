@@ -10,7 +10,6 @@ export function useJoinWorkspace() {
     mutationFn: ({ id, code }: { id: number; code: string }) =>
       joinWorkspace(id, code),
     onSuccess: (data) => {
-      console.log(data, "======>");
       toast.success(data.message);
       queryClient.invalidateQueries({ queryKey: ["workspaces"] });
       queryClient.invalidateQueries({ queryKey: ["workspace", data.id] });

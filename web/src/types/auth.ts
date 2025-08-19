@@ -14,3 +14,7 @@ export type TUser = {
   email: string;
   name: string;
 };
+
+export type TLoginResponse = {
+  message: string;
+};

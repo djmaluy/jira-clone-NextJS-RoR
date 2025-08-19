@@ -13,7 +13,7 @@ class WorkspacesController < ApplicationController
     end
 
     if workspace.save
-      Membership.create!(user: current_user, workspace: workspace, role: :owner)
+      Membership.create!(user: current_user, workspace: workspace, role: :admin)
       render json: {id: workspace.id, message: "Successfully created" }, status: :created
     else
       render json: { errors: workspace.errors.full_messages }, status: :unprocessable_entity
