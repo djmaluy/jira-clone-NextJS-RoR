@@ -1,7 +1,7 @@
 class MembersController < ApplicationController
   before_action :set_workspace
   before_action :set_member, only: [:update, :destroy]
-  before_action :authorize_workspace_admin, only: [:update, :destroy]
+  before_action :workspace_admin, only: [:update, :destroy]
   before_action :prevent_last_member_deletion, only: [:destroy]
   before_action :prevent_last_admin_demotion, only: [:update]
 
@@ -31,8 +31,6 @@ class MembersController < ApplicationController
 
   def set_workspace
     @workspace = Workspace.find(params[:workspace_id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Workspace not found' }, status: :not_found
   end
 
   def set_member
@@ -43,7 +41,7 @@ class MembersController < ApplicationController
     end
   end
 
-  def authorize_workspace_admin
+  def workspace_admin
     current_user_membership = current_user.memberships.find_by(workspace: @workspace)
     
     admin_count = @workspace.memberships.where(role: :admin).count
