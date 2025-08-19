@@ -16,7 +16,7 @@ class AuthController < ApplicationController
 
     if user&.authenticate(params[:password])
       JwtCookieService.set_cookie(cookies, user)
-      render json: { message: "ok"}, status: :ok
+      render json: { message: "Logged in successfully" }, status: :ok
     else
       render json: { error: 'Invalid credentials' }, status: :unauthorized
     end

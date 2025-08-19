@@ -3,19 +3,26 @@ import { NextResponse } from "next/server";
 
 import { routes } from "./lib/routes";
 
-export function middleware(request: NextRequest) {
-  const jwtToken = request.cookies.get("jwt_token")?.value;
-  const { pathname } = request.nextUrl;
+const PUBLIC_ROUTES = [routes.SIGN_IN, routes.SIGN_UP];
+const PROTECTED_ROUTES = ["/workspaces"];
 
-  if (
-    jwtToken &&
-    (pathname === routes.SIGN_IN || pathname === routes.SIGN_UP)
-  ) {
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const jwtToken = request.cookies.get("jwt_token")?.value;
+
+  const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
+  const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
+    pathname.startsWith(route)
+  );
+
+  if (jwtToken && isPublicRoute) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (!jwtToken && pathname !== routes.SIGN_IN) {
-    return NextResponse.redirect(new URL(routes.SIGN_IN, request.url));
+  if (!jwtToken && isProtectedRoute) {
+    const redirectUrl = new URL(routes.SIGN_IN, request.url);
+    redirectUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(redirectUrl);
   }
 
   return NextResponse.next();
@@ -23,6 +30,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/|api/|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|css|js)$|api/).*)",
   ],
 };

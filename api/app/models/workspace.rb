@@ -20,10 +20,6 @@ class Workspace < ApplicationRecord
     end
   end
 
-  def owner
-    memberships.find_by(role: :owner)&.user
-  end
-
   private
 
   def generate_invitation_code
