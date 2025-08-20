@@ -1,24 +1,17 @@
 class Workspace < ApplicationRecord
   include Base64Image
+  include HasImageUrl
+
   default_scope { order(created_at: :desc) }
 
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
+  has_many :projects, dependent: :destroy
   has_one_attached :image
   
   validates :name, presence: true
 
   before_create :generate_invitation_code
-
-  def image_url
-    return nil unless image.attached?
-    
-    if Rails.env.development?
-      "http://localhost:4000#{Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)}"
-    else
-      Rails.application.routes.url_helpers.url_for(image)
-    end
-  end
 
   private
 

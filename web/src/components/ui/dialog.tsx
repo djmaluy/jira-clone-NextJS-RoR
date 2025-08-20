@@ -1,6 +1,7 @@
 "use client";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { XIcon } from "lucide-react";
 import * as React from "react";
 
@@ -65,6 +66,9 @@ function DialogContent({
         )}
         {...props}
       >
+        <VisuallyHidden>
+          <DialogTitle>Dialog</DialogTitle>
+        </VisuallyHidden>
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close
