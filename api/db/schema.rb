@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_18_181610) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_20_092139) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,6 +52,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_18_181610) do
     t.index ["workspace_id"], name: "index_memberships_on_workspace_id"
   end
 
+  create_table "projects", force: :cascade do |t|
+    t.string "name"
+    t.bigint "workspace_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["workspace_id"], name: "index_projects_on_workspace_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
@@ -71,4 +79,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_18_181610) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "memberships", "users"
   add_foreign_key "memberships", "workspaces"
+  add_foreign_key "projects", "workspaces"
 end

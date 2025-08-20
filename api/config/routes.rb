@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   scope :api, defaults: { format: :json } do
     resources :workspaces do
       resources :members, only: [:update, :destroy, :index]
+      resources :projects, only: [:create, :index, :show]
 
       member do
         put :reset_invitation_code
@@ -9,7 +10,6 @@ Rails.application.routes.draw do
       end
     end
     
-
     scope :auth do
       post :sign_up, to: 'auth#sign_up'
       post :login, to: 'auth#login'
