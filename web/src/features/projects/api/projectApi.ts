@@ -1,5 +1,10 @@
 import { api } from "@/lib/apiClient";
-import { TCreateProjectRes, TProject, TProjectReq } from "@/types/project";
+import {
+  TCreateProjectRes,
+  TProject,
+  TProjectReq,
+  TProjectRes,
+} from "@/types/project";
 
 const API_PROJECTS_URL = "/projects";
 
@@ -18,20 +23,38 @@ export const fetchAllProjects = async (workspaceId: string) => {
   const res = await api.get<TProject[]>(
     `/workspaces/${workspaceId}${API_PROJECTS_URL}`
   );
+
   return res.data;
 };
 
-// export const updateWorkspace = async (data: TWorkspaceReq, id: number) => {
-//   const res = await api.put<TWorkspace>(`${API_WORKSPACES_URL}/${id}`, data);
-//   return res.data;
-// };
+export const getProject = async (
+  workspaceId: string,
+  id: string
+): Promise<TProjectRes> => {
+  const res = await api.get<TProjectRes>(
+    `/workspaces/${workspaceId}${API_PROJECTS_URL}/${id}`
+  );
 
-// export const getWorkspace = async (id: string) => {
-//   const res = await api.get<TWorkspace>(`${API_WORKSPACES_URL}/${id}`);
-//   return res.data;
-// };
+  return res.data;
+};
 
-// export const deleteWorkspace = async (id: number) => {
-//   const res = await api.delete(`${API_WORKSPACES_URL}/${id}`);
-//   return res.data;
-// };
+export const updateProject = async (
+  workspaceId: string,
+  projectId: number,
+  data: TProjectReq
+) => {
+  const res = await api.put<TProject>(
+    `/workspaces/${workspaceId}${API_PROJECTS_URL}/${projectId}`,
+    data
+  );
+
+  return res.data;
+};
+
+export const deleteProject = async (workspaceId: string, projectId: number) => {
+  const res = await api.delete(
+    `/workspaces/${workspaceId}${API_PROJECTS_URL}/${projectId}`
+  );
+
+  return res.data;
+};

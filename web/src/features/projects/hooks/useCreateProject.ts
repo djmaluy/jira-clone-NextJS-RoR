@@ -19,6 +19,7 @@ export function useCreateProject() {
     onSuccess: (data) => {
       toast.success(data.message);
       queryClient.invalidateQueries({ queryKey: ["projects"] });
+      router.push(`/workspaces/${data.workspaceId}/projects/${data.id}`);
     },
     onError: (error) => {
       const backendMessage = error.response?.data?.error;

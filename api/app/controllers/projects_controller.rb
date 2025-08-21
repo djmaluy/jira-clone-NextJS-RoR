@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :set_workspace, only: %i[create index]
-  before_action :set_project, only: %i[show]
+  before_action :set_project, only: %i[show update]
 
   def create
     @project = @workspace.projects.new(project_params.except(:image))
@@ -10,7 +10,27 @@ class ProjectsController < ApplicationController
     end
 
     if @project.save
-      render json: { message: "Successfully created" }, status: :created
+      render json: { 
+                    id: @project.id,
+                    workspaceId: @project.workspace.id,
+                    message: "Successfully created" 
+                    }, status: :created
+    else
+      render json: { errors: @project.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @project.update(project_params.except(:image))
+      if params[:project][:image].present?
+        @project.attach_base64_image(:image, params[:project][:image])
+      end
+
+      render json: { 
+                    id: @project.id,
+                    workspaceId: @project.workspace_id, 
+                    message: "Successfully updated" 
+                  }, status: :ok
     else
       render json: { errors: @project.errors.full_messages }, status: :unprocessable_entity
     end
