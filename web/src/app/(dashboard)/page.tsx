@@ -1,22 +1,11 @@
-import { routes } from "@/lib/routes";
+import { requireUser } from "@/lib/requireUser";
 import { serverApi } from "@/lib/serverClient";
-import { AxiosError } from "axios";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
   const api = await serverApi();
-
-  try {
-    const { data: _user } = await api.get("/auth/current");
-  } catch (err: unknown) {
-    const error = err as AxiosError;
-
-    if (error.response?.status === 401) {
-      redirect(routes.SIGN_IN);
-    }
-
-    throw error;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _user = await requireUser();
 
   const { data: workspaces } = await api.get("/workspaces");
 

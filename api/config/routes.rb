@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   scope :api, defaults: { format: :json } do
     resources :workspaces do
       resources :members, only: [:update, :destroy, :index]
-      resources :projects, only: [:create, :index, :show]
+      resources :projects, only: [:create, :update, :index, :show]
 
       member do
         put :reset_invitation_code

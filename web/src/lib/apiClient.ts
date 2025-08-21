@@ -10,8 +10,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      return [];
+      return;
     }
-    return Promise.reject(error);
+
+    throw new Error(error.response?.data?.error);
   }
 );
