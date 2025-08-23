@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ProjectAvatar } from "@/features/projects/components/project_avatar";
+import TaskViewSwitcher from "@/features/tasks/components/task-view-switcher";
 import { serverApi } from "@/lib/serverClient";
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";
@@ -41,6 +42,7 @@ const ProjectPage = async ({ params }: ProjectIdPageProps) => {
           </Button>
         </div>
       </div>
+      <TaskViewSwitcher />
     </div>
   );
 };

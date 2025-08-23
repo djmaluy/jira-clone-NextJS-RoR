@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
 import { CreateProjectModal } from "@/features/projects/components/create-project-modal";
+import CreateTaskModal from "@/features/tasks/components/create-task-modal";
 import { CreateWorkspaceModal } from "@/features/workspaces/components/create-workspace-modal";
 import { NuqsAdapter } from "nuqs/adapters/next";
 
@@ -26,6 +27,7 @@ const DashboardLayout = ({ children }: TDashboardLayoutProps) => {
       </div>
       <CreateWorkspaceModal />
       <CreateProjectModal />
+      <CreateTaskModal />
     </NuqsAdapter>
   );
 };

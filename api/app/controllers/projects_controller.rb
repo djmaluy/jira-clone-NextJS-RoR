@@ -22,8 +22,12 @@ class ProjectsController < ApplicationController
 
   def update
     if @project.update(project_params.except(:image))
-      if params[:project][:image].present?
-        @project.attach_base64_image(:image, params[:project][:image])
+      if params[:project].key?(:image)
+        if params[:project][:image].present?
+          @project.attach_base64_image(:image, params[:project][:image])
+        else
+          @project.image.purge if @project.image.attached?
+        end
       end
 
       render json: { 
