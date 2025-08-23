@@ -81,6 +81,7 @@ export const EditProjectForm = ({
         image: imageBase64,
       },
     };
+
     update(
       {
         workspaceId: params.workspaceId as string,
@@ -89,7 +90,10 @@ export const EditProjectForm = ({
       },
       {
         onSuccess: () => {
-          form.reset();
+          form.reset({
+            ...values,
+            image: imageBase64 || "",
+          });
         },
       }
     );
@@ -206,7 +210,7 @@ export const EditProjectForm = ({
                                 type="button"
                                 className="w-fit mt-2"
                                 onClick={() => {
-                                  field.onChange(null);
+                                  field.onChange("");
                                   if (inputRef.current) {
                                     inputRef.current.value = "";
                                   }
@@ -244,7 +248,7 @@ export const EditProjectForm = ({
                     Cancel
                   </Button>
                   <Button
-                    // disabled={isPending}
+                    disabled={isPending}
                     type="submit"
                     size="lg"
                     variant="primary"
@@ -271,7 +275,7 @@ export const EditProjectForm = ({
                 size="sm"
                 variant="destructive"
                 type="button"
-                // disabled={isPending || isDeletePending}
+                disabled={isPending || isDeletePending}
                 onClick={handleDelete}
               >
                 Delete project

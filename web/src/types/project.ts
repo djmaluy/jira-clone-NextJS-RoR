@@ -1,5 +1,5 @@
 export type TProject = {
-  id: number;
+  id: string;
   name: string;
   image?: string;
   workspaceId?: string;
@@ -7,7 +7,7 @@ export type TProject = {
 
 export type TProjectReq = {
   project: {
-    id?: number;
+    id?: string;
     name: string;
     image?: string;
   };
@@ -16,11 +16,11 @@ export type TProjectReq = {
 export type TCreateProjectRes = {
   message: string;
   workspaceId: string;
-  id: number;
+  id: string;
 };
 
 export type TProjectRes = {
-  id: number;
+  id: string;
   name: string;
   workspaceId: string;
   image?: string;

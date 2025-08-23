@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     resources :workspaces do
       resources :members, only: [:update, :destroy, :index]
       resources :projects, only: [:create, :update, :index, :show]
+      resources :tasks, only: [:create, :index]
 
       member do
         put :reset_invitation_code
