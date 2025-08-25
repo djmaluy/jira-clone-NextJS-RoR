@@ -14,6 +14,10 @@ export type TTask = {
   status: TaskStatus;
   assigneeId: string;
   description?: string;
+  projectName?: string;
+  assigneeName?: string;
+  projectImg?: string;
+  dueDate: string;
 };
 
 export type TTaskReq = {
