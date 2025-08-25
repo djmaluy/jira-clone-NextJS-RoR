@@ -10,7 +10,9 @@ import { useQueryState } from "nuqs";
 import { useTaskFilters } from "../hooks/use-task-filters";
 import { useCreateTaskModal } from "../hooks/useCreateTaskModal";
 import { useFetchTasks } from "../hooks/useFetchTasks";
+import { columns } from "./columns";
 import { DataFilters } from "./data-filters";
+import { DataTable } from "./data-table";
 
 const TaskViewSwitcher = () => {
   const [{ status, projectId, assigneeId, dueDate }] = useTaskFilters();
@@ -61,7 +63,7 @@ const TaskViewSwitcher = () => {
         ) : (
           <>
             <TabsContent className="mt-0" value="table">
-              {tasks?.map((task) => task.name)}
+              <DataTable columns={columns} data={tasks ?? []} />
             </TabsContent>
             <TabsContent className="mt-0" value="kanban">
               Data kanban
