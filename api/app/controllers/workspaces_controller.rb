@@ -36,7 +36,7 @@ class WorkspacesController < ApplicationController
     render :show, formats: :json, status: :ok
   end
 
-   def destroy
+  def destroy
     @workspace.destroy
 
     head :no_content

@@ -37,3 +37,11 @@ export const fetchTasks = async ({
 
   return res.data;
 };
+
+export const deleteTask = async (workspaceId: string, id: string) => {
+  const res = await api.delete(
+    `/workspaces/${workspaceId}${API_TASKS_URL}/${id}`
+  );
+
+  return res.data;
+};

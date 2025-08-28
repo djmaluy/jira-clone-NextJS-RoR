@@ -13,7 +13,7 @@ const ProjectIdSettingsPage = async ({
 }: ProjectIdSettingsPageProps) => {
   const api = await serverApi();
   // const _user = await requireUser();
-  const { projectId, workspaceId } = params;
+  const { projectId, workspaceId } = await params;
   const { data: project } = await api.get(
     `workspaces/${workspaceId}/projects/${projectId}`
   );
