@@ -12,6 +12,8 @@ gem "jwt"
 gem "bcrypt"
 gem 'image_processing', '~> 1.14'
 gem "jbuilder"
+gem 'pundit'
+gem 'decent_exposure', '~> 3.0'
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { toast } from "sonner";
 
-import { AxiosError } from "axios";
 import { deleteMember } from "../api/membersApi";
 
 type TDeleteMemberRes = { message: string };

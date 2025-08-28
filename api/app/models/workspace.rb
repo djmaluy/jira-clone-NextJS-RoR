@@ -12,6 +12,7 @@ class Workspace < ApplicationRecord
   validates :name, presence: true
 
   before_create :generate_invitation_code
+  
 
   private
 

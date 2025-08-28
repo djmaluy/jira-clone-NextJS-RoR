@@ -13,6 +13,6 @@ api.interceptors.response.use(
       return;
     }
 
-    throw new Error(error.response?.data?.error);
+    return Promise.reject(error);
   }
 );
