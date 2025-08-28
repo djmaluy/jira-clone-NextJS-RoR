@@ -26,7 +26,7 @@ export function useUpdateProject() {
       router.push(`/workspaces/${project.workspaceId}/projects/${project.id}`);
     },
     onError: () => {
-      toast.error("Failed to update workspace!");
+      toast.error("Failed to update project!");
     },
   });
 }

@@ -29,7 +29,7 @@ export const MembersList = () => {
   const { mutate: deleteMember, isPending: isDeletePending } =
     useDeleteMember();
 
-  const handleUpdateMember = (userId: number, role: string) => {
+  const handleUpdateMember = (userId: string, role: string) => {
     updateMember({
       workspaceId,
       userId,
@@ -37,7 +37,7 @@ export const MembersList = () => {
     });
   };
 
-  const handleDeleteMember = (userId: number) => {
+  const handleDeleteMember = (userId: string) => {
     deleteMember({
       workspaceId,
       userId,
@@ -49,7 +49,8 @@ export const MembersList = () => {
       <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
         <Button asChild variant="secondary" size="sm">
           <Link href={`/workspaces/${workspaceId}`}>
-            <ArrowLeftIcon className="size-4 mr-2" />
+            <ArrowLeftIcon className="size-4" />
+            Back
           </Link>
         </Button>
         <CardTitle className="text-xl font-bold">Members list</CardTitle>

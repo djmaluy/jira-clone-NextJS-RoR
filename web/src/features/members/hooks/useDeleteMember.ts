@@ -13,13 +13,13 @@ export function useDeleteMember() {
   return useMutation<
     TDeleteMemberRes,
     AxiosError<TErrorRes>,
-    { workspaceId: string; userId: number }
+    { workspaceId: string; userId: string }
   >({
     mutationFn: ({ workspaceId, userId }) => deleteMember(workspaceId, userId),
 
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["members"] });
-      toast.success(data.message);
+      toast.success("Successfully deleted!");
     },
 
     onError: (error) => {

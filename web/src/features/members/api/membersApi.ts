@@ -5,7 +5,7 @@ const API_MEMBERS_URL = "/members";
 
 export const updateMember = async (
   workspaceId: string,
-  userId: number,
+  userId: string,
   role: string
 ): Promise<TUpdateRoleRes> => {
   const res = await api.put<TUpdateRoleRes>(
@@ -22,7 +22,7 @@ export const fetchMembers = async (workspaceId: string) => {
   return res.data;
 };
 
-export const deleteMember = async (workspaceId: string, userId: number) => {
+export const deleteMember = async (workspaceId: string, userId: string) => {
   const res = await api.delete<{ message: string }>(
     `/workspaces/${workspaceId}${API_MEMBERS_URL}/${userId}`
   );

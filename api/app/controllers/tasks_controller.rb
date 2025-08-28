@@ -18,26 +18,19 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
 
     if @task.save
-      render json: { 
-                    id: @task.id,
-                    workspaceId: @task.workspace.id,
-                    message: "Successfully created" 
-                    }, status: :created
+      render :create, formats: :json, status: :created
     else
       render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
- def update
-  if @task.update(task_params)
-    render json: { 
-      id: @task.id,
-      message: "Successfully updated"
-    }, status: :ok
-  else
-    render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
+  def update
+    if @task.update(task_params)
+      render json: { id: @task.id }, status: :ok
+    else
+      render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
+    end
   end
- end
 
   def destroy
     @task.destroy

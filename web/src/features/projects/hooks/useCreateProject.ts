@@ -17,7 +17,7 @@ export function useCreateProject() {
   >({
     mutationFn: ({ workspaceId, data }) => createProject(workspaceId, data),
     onSuccess: (data) => {
-      toast.success(data.message);
+      toast.success("Successfully created");
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       router.push(`/workspaces/${data.workspaceId}/projects/${data.id}`);
     },

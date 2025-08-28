@@ -9,13 +9,13 @@ export function useUpdateMember() {
   return useMutation<
     TUpdateRoleRes,
     AxiosError<{ error: string }>,
-    { workspaceId: string; userId: number; role: string }
+    { workspaceId: string; userId: string; role: string }
   >({
     mutationFn: ({ workspaceId, userId, role }) =>
       updateMember(workspaceId, userId, role),
 
-    onSuccess: (data) => {
-      toast.success(data.message);
+    onSuccess: () => {
+      toast.success("Successfully updated!");
     },
 
     onError: (error) => {

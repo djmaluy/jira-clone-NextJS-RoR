@@ -14,7 +14,6 @@ export type TProjectReq = {
 };
 
 export type TCreateProjectRes = {
-  message: string;
   workspaceId: string;
   id: string;
 };

@@ -30,11 +30,7 @@ class ProjectsController < ApplicationController
         end
       end
 
-      render json: { 
-                    id: @project.id,
-                    workspaceId: @project.workspace_id, 
-                    message: "Successfully updated" 
-                  }, status: :ok
+      render :update, formats: :json, status: :ok
     else
       render json: { errors: @project.errors.full_messages }, status: :unprocessable_entity
     end

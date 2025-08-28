@@ -17,7 +17,7 @@ export function useDeleteProject() {
       // router.push(routes.HOME);
     },
     onError: () => {
-      toast.error("Failed to create workspace!");
+      toast.error("Failed to delete project!");
     },
   });
 }
