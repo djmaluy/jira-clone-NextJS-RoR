@@ -1,7 +1,7 @@
 import { api } from "@/lib/apiClient";
 import { TWorkspace, TWorkspaceReq } from "@/types/workspace";
 
-const API_WORKSPACES_URL = "/workspaces";
+export const API_WORKSPACES_URL = "/workspaces";
 
 export const createWorkspace = async (data: TWorkspaceReq) => {
   const res = await api.post<TWorkspace>(API_WORKSPACES_URL, data);

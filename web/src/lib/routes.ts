@@ -3,4 +3,6 @@ export const routes = {
   SIGN_UP: "/sign-up",
   HOME: "/",
   WORKSPACES: "/workspaces",
+  PROJECTS: "/projects",
+  TASKS: "/tasks",
 };

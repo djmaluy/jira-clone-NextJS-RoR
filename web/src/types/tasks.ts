@@ -7,7 +7,7 @@ export enum TaskStatus {
 }
 
 export type TTask = {
-  id: number;
+  id: string;
   name: string;
   workspaceId: string;
   projectId: string;
@@ -17,18 +17,16 @@ export type TTask = {
   projectName?: string;
   assigneeName?: string;
   projectImg?: string;
-  dueDate: string;
+  dueDate?: string | Date;
 };
 
 export type TTaskReq = {
-  task: {
-    project_id: string;
-    name: string;
-    status: TaskStatus;
-    due_date: Date;
-    assignee_id: string;
-    description?: string;
-  };
+  name: string;
+  workspaceId: string;
+  projectId: string;
+  status: TaskStatus;
+  assigneeId: string;
+  dueDate: string | Date;
 };
 
 export type TCreateTaskRes = {

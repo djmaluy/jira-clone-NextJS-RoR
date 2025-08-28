@@ -8,8 +8,7 @@ export function useDeleteTask() {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: ({ workspaceId, id }: { workspaceId: string; id: string }) =>
-      deleteTask(workspaceId, id),
+    mutationFn: (id: string) => deleteTask(id),
     onSuccess: () => {
       toast.success("Successfully deleted!");
       queryClient.invalidateQueries({ queryKey: ["tasks"] });

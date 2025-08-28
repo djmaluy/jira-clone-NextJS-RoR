@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[destroy]
+  before_action :set_task, only: %i[destroy show update]
 
   def index
     @tasks = Task
@@ -10,8 +10,12 @@ class TasksController < ApplicationController
     .by_due_date(params[:due_date])
   end
 
+  def show
+    render :show, formats: :json, status: :ok
+  end
+
   def create
-    @task = Task.new(task_params.merge(workspace_id: params[:workspace_id]))
+    @task = Task.new(task_params)
 
     if @task.save
       render json: { 
@@ -23,6 +27,17 @@ class TasksController < ApplicationController
       render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
     end
   end
+
+ def update
+  if @task.update(task_params)
+    render json: { 
+      id: @task.id,
+      message: "Successfully updated"
+    }, status: :ok
+  else
+    render json: { errors: @task.errors.full_messages }, status: :unprocessable_entity
+  end
+ end
 
   def destroy
     @task.destroy
@@ -36,6 +51,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:name, :due_date, :assignee_id, :status, :project_id)
+    params.require(:task).permit(:name, :due_date, :assignee_id, :status, :project_id, :workspace_id)
   end
 end
