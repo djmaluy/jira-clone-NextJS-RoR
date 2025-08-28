@@ -15,7 +15,8 @@ type ProjectIdPageProps = {
 const ProjectPage = async ({ params }: ProjectIdPageProps) => {
   const api = await serverApi();
   // const _user = await requireUser();
-  const { projectId, workspaceId } = params;
+  const { projectId, workspaceId } = await params;
+
   const { data: project } = await api.get(
     `workspaces/${workspaceId}/projects/${projectId}`
   );

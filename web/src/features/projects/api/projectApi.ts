@@ -19,7 +19,7 @@ export const createProject = async (
   return res.data;
 };
 
-export const fetchAllProjects = async (workspaceId: string) => {
+export const fetchAllProjects = async (workspaceId: string | undefined) => {
   const res = await api.get<TProject[]>(
     `/workspaces/${workspaceId}${API_PROJECTS_URL}`
   );

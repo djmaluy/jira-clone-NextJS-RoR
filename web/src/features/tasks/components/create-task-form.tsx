@@ -106,7 +106,7 @@ export const CreateTaskForm = ({
                 control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Project name</FormLabel>
+                    <FormLabel>Task name</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
