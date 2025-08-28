@@ -54,7 +54,7 @@ export const columns: ColumnDef<TTask>[] = [
             className="size-6"
             image={project.projectImg}
           />
-          <p>{project.name}</p>
+          <p>{project.projectName}</p>
         </div>
       );
     },
@@ -102,7 +102,7 @@ export const columns: ColumnDef<TTask>[] = [
     cell: ({ row }) => {
       const dueDate = row.original.dueDate;
 
-      return <TaskDate value={dueDate} />;
+      return <TaskDate value={dueDate as string} />;
     },
   },
   {

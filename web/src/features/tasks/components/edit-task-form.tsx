@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { Resolver, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { Datepicker } from "@/components/date-picker";
 import { DottedSeparator } from "@/components/dotted-separator";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,9 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-
-import { Datepicker } from "@/components/date-picker";
 import {
   Select,
   SelectContent,
@@ -29,18 +27,21 @@ import {
 } from "@/components/ui/select";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
 import { ProjectAvatar } from "@/features/projects/components/project_avatar";
+import { cn } from "@/lib/utils";
 import { TMemberRes } from "@/types/members";
 import { TProject } from "@/types/project";
-import { TaskStatus } from "@/types/tasks";
-import { useCreateTask } from "../hooks/useCreateTask";
+import { TaskStatus, TTask } from "@/types/tasks";
 
-type TCreateTaskFormProps = {
+import { useUpdateTask } from "../hooks/useUpdateTask";
+
+type TEditTaskFormProps = {
   onCancel?: () => void;
   projects: TProject[];
   members: TMemberRes[];
+  initialValues: TTask;
 };
 
-const createTaskSchema = z.object({
+const editTaskSchema = z.object({
   name: z.string().trim().min(1, "Required"),
   status: z.enum(TaskStatus, { message: "Required" }),
   projectId: z.string().trim().min(1, "Required"),
@@ -49,30 +50,37 @@ const createTaskSchema = z.object({
   description: z.string().optional(),
 });
 
-export const CreateTaskForm = ({
+export const EditTaskForm = ({
   onCancel,
   projects,
   members,
-}: TCreateTaskFormProps) => {
-  const { mutate: create, isPending } = useCreateTask();
+  initialValues,
+}: TEditTaskFormProps) => {
+  const { mutate: update, isPending } = useUpdateTask();
   const params = useParams();
 
-  const form = useForm<z.infer<typeof createTaskSchema>>({
-    resolver: zodResolver(createTaskSchema.omit({})) as Resolver<
-      z.infer<typeof createTaskSchema>
-    >,
+  const form = useForm<z.infer<typeof editTaskSchema>>({
+    resolver: zodResolver(
+      editTaskSchema.omit({ description: true })
+    ) as Resolver<z.infer<typeof editTaskSchema>>,
     defaultValues: {
-      name: "",
+      ...initialValues,
+      dueDate: initialValues.dueDate
+        ? new Date(initialValues.dueDate)
+        : undefined,
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof createTaskSchema>) => {
-    create(
+  console.log(initialValues, "Initital values hereee!!!");
+
+  const onSubmit = async (values: z.infer<typeof editTaskSchema>) => {
+    update(
       {
         data: {
           ...values,
           workspaceId: params.workspaceId as string,
         },
+        id: initialValues.id as string,
       },
       {
         onSuccess: () => {
@@ -86,7 +94,7 @@ export const CreateTaskForm = ({
   return (
     <Card className="w-full h-full border-none shadow-none">
       <CardHeader className="flex p-7">
-        <CardTitle className="text-xl font-bold">Create a new task</CardTitle>
+        <CardTitle className="text-xl font-bold">Edit a task</CardTitle>
       </CardHeader>
       <div className="px-7">
         <DottedSeparator />
@@ -249,7 +257,7 @@ export const CreateTaskForm = ({
                 size="lg"
                 variant="primary"
               >
-                Create task
+                Save changes
               </Button>
             </div>
           </form>

@@ -3,13 +3,13 @@ Rails.application.routes.draw do
     resources :workspaces do
       resources :members, only: %i[update destroy index]
       resources :projects, only: %i[create update index show]
-      resources :tasks, only: %i[create index destroy]
-
+      
       member do
         put :reset_invitation_code
         put :join
       end
     end
+    resources :tasks, only: %i[create index destroy show update]
     
     scope :auth do
       post :sign_up, to: 'auth#sign_up'
