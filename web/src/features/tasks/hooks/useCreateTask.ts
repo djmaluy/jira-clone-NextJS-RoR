@@ -16,8 +16,8 @@ export function useCreateTask() {
     { data: TTaskReq }
   >({
     mutationFn: ({ data }) => createTask(data),
-    onSuccess: (data) => {
-      toast.success(data.message);
+    onSuccess: () => {
+      toast.success("Successfully created");
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       // router.push(`/workspaces/${data.workspaceId}/tasks/${data.id}`);
     },

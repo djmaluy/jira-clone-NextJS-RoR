@@ -3,12 +3,9 @@ Rails.application.routes.draw do
     resources :workspaces do
       resources :members, only: %i[update destroy index]
       resources :projects, only: %i[create update index show]
-      
-      member do
-        put :reset_invitation_code
-        put :join
-      end
+      resource :invitation, only: %i[create update]
     end
+    
     resources :tasks, only: %i[create index destroy show update]
     
     scope :auth do

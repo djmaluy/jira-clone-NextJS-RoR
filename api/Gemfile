@@ -12,6 +12,7 @@ gem "jwt"
 gem "bcrypt"
 gem 'image_processing', '~> 1.14'
 gem "jbuilder"
+gem 'decent_exposure', '~> 3.0'
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
@@ -22,6 +23,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'rails-controller-testing'
+  gem 'bullet'
 
   gem "pry", "~> 0.15.0"
   gem "pry-rails"

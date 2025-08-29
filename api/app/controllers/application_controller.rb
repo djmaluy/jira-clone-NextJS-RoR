@@ -4,7 +4,7 @@ class ApplicationController < ActionController::API
   include ActionController::Cookies
   include ActionController::RequestForgeryProtection
 
-
+  
   private
 
   def current_user

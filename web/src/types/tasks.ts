@@ -30,7 +30,6 @@ export type TTaskReq = {
 };
 
 export type TCreateTaskRes = {
-  message: string;
   id: string;
   workspaceId: string;
 };

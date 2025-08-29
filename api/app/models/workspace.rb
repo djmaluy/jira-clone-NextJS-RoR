@@ -13,8 +13,6 @@ class Workspace < ApplicationRecord
 
   before_create :generate_invitation_code
 
-  private
-
   def generate_invitation_code
     charset = Array('A'..'Z') + Array('a'..'z') + Array('0'..'9')
     self.invitation_code = Array.new(8) { charset.sample }.join

@@ -71,8 +71,6 @@ export const EditTaskForm = ({
     },
   });
 
-  console.log(initialValues, "Initital values hereee!!!");
-
   const onSubmit = async (values: z.infer<typeof editTaskSchema>) => {
     update(
       {

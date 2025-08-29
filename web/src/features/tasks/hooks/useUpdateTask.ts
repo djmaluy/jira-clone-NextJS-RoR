@@ -17,14 +17,14 @@ export function useUpdateTask() {
     { id: string; data: TTaskReq }
   >({
     mutationFn: ({ data, id }) => updateTask(data, id),
-    onSuccess: (data) => {
-      toast.success(data.message);
+    onSuccess: () => {
+      toast.success("Successfully updated");
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       router.refresh();
     },
     onError: (error) => {
       const backendMessage = error.response?.data?.error;
-      toast.error(backendMessage || "Failed to create task!");
+      toast.error(backendMessage || "Failed to update task!");
     },
   });
 }

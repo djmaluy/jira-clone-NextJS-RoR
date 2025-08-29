@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { toast } from "sonner";
 
-import { AxiosError } from "axios";
 import { deleteMember } from "../api/membersApi";
 
 type TDeleteMemberRes = { message: string };
@@ -13,13 +13,13 @@ export function useDeleteMember() {
   return useMutation<
     TDeleteMemberRes,
     AxiosError<TErrorRes>,
-    { workspaceId: string; userId: number }
+    { workspaceId: string; userId: string }
   >({
     mutationFn: ({ workspaceId, userId }) => deleteMember(workspaceId, userId),
 
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["members"] });
-      toast.success(data.message);
+      toast.success("Successfully deleted!");
     },
 
     onError: (error) => {
