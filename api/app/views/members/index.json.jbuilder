@@ -1,4 +1,4 @@
-json.array! @members do |membership|
+json.array! members do |membership|
   json.id membership.user.id.to_s
   json.name membership.user.name
   json.email membership.user.email

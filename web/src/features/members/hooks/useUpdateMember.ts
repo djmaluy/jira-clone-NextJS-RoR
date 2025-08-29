@@ -1,11 +1,13 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { toast } from "sonner";
 
 import { TUpdateRoleRes } from "@/types/members";
-import { AxiosError } from "axios";
+
 import { updateMember } from "../api/membersApi";
 
 export function useUpdateMember() {
+  const queryClient = useQueryClient();
   return useMutation<
     TUpdateRoleRes,
     AxiosError<{ error: string }>,
@@ -16,11 +18,12 @@ export function useUpdateMember() {
 
     onSuccess: () => {
       toast.success("Successfully updated!");
+      queryClient.invalidateQueries({ queryKey: ["members"] });
     },
 
     onError: (error) => {
       const backendMessage = error.response?.data?.error;
-      toast.error(backendMessage || "Failed to update workspace!");
+      toast.error(backendMessage || "Failed to update member!");
     },
   });
 }

@@ -1,2 +1,2 @@
-json.extract! @task, :id
-json.workspaceId @task.workspace_id
+json.extract! task, :id
+json.workspaceId task.workspace_id

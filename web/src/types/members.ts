@@ -2,7 +2,7 @@ export type TMemberRes = {
   id: string;
   name: string;
   email: string;
-  role: number;
+  role: string;
 };
 
 export type TUpdateRoleRes = {

@@ -4,7 +4,7 @@ class Membership < ApplicationRecord
 
   enum :role, { admin: 0, member: 1 }
 
-  def last_admin?
+  def available_to_demotion?
     return false unless admin?
     workspace.memberships.where(role: :admin).count <= 1
   end

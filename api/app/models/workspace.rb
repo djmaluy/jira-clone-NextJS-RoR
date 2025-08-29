@@ -12,9 +12,6 @@ class Workspace < ApplicationRecord
   validates :name, presence: true
 
   before_create :generate_invitation_code
-  
-
-  private
 
   def generate_invitation_code
     charset = Array('A'..'Z') + Array('a'..'z') + Array('0'..'9')

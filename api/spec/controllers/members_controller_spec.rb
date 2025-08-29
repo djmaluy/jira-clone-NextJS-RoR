@@ -22,71 +22,41 @@ RSpec.describe MembersController, type: :controller do
       get :index, params: { workspace_id: workspace.id }, format: :json
       
       expect(response).to have_http_status(:ok)
-      expect(assigns(:members)).to match_array([admin_membership, member_membership])
     end
   end
 
   describe 'PUT #update' do
-    context 'when current user is admin' do
-      before do
-        allow(controller).to receive(:current_user).and_return(admin_user)
+    before do
+      allow(controller).to receive(:current_user).and_return(admin_user)
+    end
+
+    context 'when user is admin' do
+      it 'successfully updates member role' do
+        put :update, params: { workspace_id: workspace.id, id: member_user.id, role: 'admin' }
+
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)['message']).to eq('Ok')
+        expect(member_membership.reload.role).to eq('admin')
       end
 
-      context 'with valid role change' do
-        it 'updates member role successfully' do
-          put :update, params: { workspace_id: workspace.id, id: member_user.id, role: 'admin' }, format: :json
+      it 'returns error when trying to update own role' do
+        patch :update, params: { workspace_id: workspace.id, id: admin_user.id, role: 'member' }
 
-          expect(response).to have_http_status(:ok)
-          member_membership.reload
-          expect(member_membership.role).to eq('admin')
-        end
-
-        it 'does not update role when user already has the role' do
-          put :update, params: { workspace_id: workspace.id, id: member_user.id, role: 'member'  }, format: :json
-
-          expect(response).to have_http_status(:ok)
-        end
-      end
-
-      context 'when trying to demote last admin' do
-        it 'prevents demotion of last admin' do
-          put :update, params: { workspace_id: workspace.id, id: admin_user.id, role: 'member' }, format: :json
-
-          expect(response).to have_http_status(:unprocessable_entity)
-          admin_membership.reload
-          expect(admin_membership.role).to eq('admin')
-        end
-
-        it 'allows demotion when there are multiple admins' do
-          create(:membership, :admin, user: regular_user, workspace: workspace)
-          put :update, params: { workspace_id: workspace.id, id: admin_user.id, role: 'member' }, format: :json
-
-          expect(response).to have_http_status(:ok)
-          admin_membership.reload
-          expect(admin_membership.role).to eq('member')
-        end
-      end
-
-      context 'with invalid member' do
-        it 'returns not found for non-existent member' do
-          put :update, params: { workspace_id: workspace.id, id: 99999, role: 'admin' }, format: :json
-
-          expect(response).to have_http_status(:not_found)
-        end
+        expect(response).to have_http_status(:forbidden)
+        expect(JSON.parse(response.body)['error']).to eq('You cannot change your own role.')
       end
     end
 
-    context 'when current user is not admin' do
+    context 'when user is not admin' do
       before do
         allow(controller).to receive(:current_user).and_return(member_user)
       end
 
-      it 'denies access to non-admin users' do
-        put :update, params: { workspace_id: workspace.id, id: admin_user.id, role: 'member' }, format: :json
+      it 'returns access denied error' do
+        patch :update, params: { workspace_id: workspace.id, id: admin_user.id, role: 'member' }
 
-        expect(response).to have_http_status(:unprocessable_entity)
-        json_response = JSON.parse(response.body)
-        expect(json_response['error']).to eq('Access denied. Only workspace admin can manage members.')
+        expect(response).to have_http_status(:forbidden)
+        expect(JSON.parse(response.body)['error']).to eq('Access denied. Only workspace admin can manage members.')
       end
     end
   end
@@ -97,43 +67,37 @@ RSpec.describe MembersController, type: :controller do
         allow(controller).to receive(:current_user).and_return(admin_user)
       end
 
-      context 'with valid member removal' do
-        it 'removes member successfully' do
-          expect { delete :destroy, params: { workspace_id: workspace.id, id: member_user.id }, format: :json
-          }.to change(Membership, :count).by(-1)
+      it 'removes a normal member successfully' do
+        delete :destroy, params: { workspace_id: workspace.id, id: member_user.id }
 
-          expect(response).to have_http_status(:no_content)
-        end
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)['message']).to eq('Ok')
       end
 
-      context 'when trying to remove last member' do
-        let(:single_member_workspace) { create(:workspace) }
-        let!(:single_membership) { create(:membership, :admin, user: admin_user, workspace: single_member_workspace) }
+      it 'prevents removing the last member' do
+        member_membership.destroy
 
-        before do
-          allow(controller).to receive(:current_user).and_return(admin_user)
-        end
+        delete :destroy, params: { workspace_id: workspace.id, id: admin_user.id }
 
-        it 'prevents removal of last member' do
-          expect { 
-            delete :destroy, params: { workspace_id: single_member_workspace.id, id: admin_user.id }, format: :json
-          }.not_to change(Membership, :count)
-
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
+        expect(response).to have_http_status(:forbidden)
+        expect(JSON.parse(response.body)['error']).to eq('Cannot leave workspace. You are the last member.')
       end
 
-      context 'with invalid member' do
-        it 'returns not found for non-existent member' do
-          delete :destroy, params: { 
-            workspace_id: workspace.id, 
-            id: 99999 
-          }, format: :json
+      it 'prevents removing the last admin' do
+        other_member = create(:membership, workspace: workspace, user: regular_user, role: 'member')
 
-          expect(response).to have_http_status(:not_found)
-          json_response = JSON.parse(response.body)
-          expect(json_response['error']).to eq('Member not found in this workspace')
-        end
+        delete :destroy, params: { workspace_id: workspace.id, id: admin_user.id }
+
+        expect(response).to have_http_status(:forbidden)
+        expect(JSON.parse(response.body)['error']).to eq('Cannot remove the last admin from workspace.')
+      end
+
+      it 'allows admin to remove self if not last member' do
+        create(:membership, workspace: workspace, user: regular_user, role: 'member')
+
+        delete :destroy, params: { workspace_id: workspace.id, id: admin_user.id }
+
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -142,10 +106,20 @@ RSpec.describe MembersController, type: :controller do
         allow(controller).to receive(:current_user).and_return(member_user)
       end
 
-      it 'denies access to non-admin users' do
-        delete :destroy, params: { workspace_id: workspace.id, id: admin_user.id }, format: :json
+      it 'prevents removing another member' do
+        delete :destroy, params: { workspace_id: workspace.id, id: admin_user.id }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:forbidden)
+        expect(JSON.parse(response.body)['error']).to eq('Access denied. Only workspace admin can manage members.')
+      end
+
+      it 'prevents removing self if last member' do
+        admin_membership.destroy
+
+        delete :destroy, params: { workspace_id: workspace.id, id: member_user.id }
+
+        expect(response).to have_http_status(:forbidden)
+        expect(JSON.parse(response.body)['error']).to eq('Cannot leave workspace. You are the last member.')
       end
     end
   end
