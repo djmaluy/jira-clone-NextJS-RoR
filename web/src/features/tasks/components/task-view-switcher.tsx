@@ -12,6 +12,7 @@ import { useCreateTaskModal } from "../hooks/useCreateTaskModal";
 import { useFetchTasks } from "../hooks/useFetchTasks";
 import { columns } from "./columns";
 import { DataFilters } from "./data-filters";
+import { DataKanban } from "./data-kanban";
 import { DataTable } from "./data-table";
 
 const TaskViewSwitcher = () => {
@@ -66,7 +67,7 @@ const TaskViewSwitcher = () => {
               <DataTable columns={columns} data={tasks ?? []} />
             </TabsContent>
             <TabsContent className="mt-0" value="kanban">
-              Data kanban
+              <DataKanban data={tasks ?? []} />
             </TabsContent>
             <TabsContent className="mt-0" value="calendar">
               Data calendar
