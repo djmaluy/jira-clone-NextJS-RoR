@@ -17,8 +17,6 @@ module Base64Image
     extension = case content_type
                when 'image/jpeg', 'image/jpg' then '.jpg'
                when 'image/png' then '.png'
-               when 'image/gif' then '.gif'
-               when 'image/webp' then '.webp'
                else '.png'
                end
 

@@ -9,6 +9,7 @@ class TasksController < ApplicationController
   }
 
   def index
+    tasks 
   end
 
   def show
@@ -31,8 +32,7 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    task.destroy
-    head :no_content
+    render json: { message: 'Successfully deleted' }, status: :no_content if task.destroy
   end
 
   private

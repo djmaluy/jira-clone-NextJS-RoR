@@ -1,5 +1,5 @@
 class AuthController < ApplicationController
-  skip_before_action :authenticate_user, only: [:login, :sign_up]
+  skip_before_action :authenticate_user, only: [:login, :sign_up, :logout]
 
   def sign_up
     user = User.new(user_params)
@@ -26,13 +26,13 @@ class AuthController < ApplicationController
     if current_user
       render json: { id: current_user.id, email: current_user.email, name: current_user.name }, status: :ok
     else
-      head :unauthorized
+      render json: { error: 'Unauthorized' }, status: :unauthorized
     end
   end
 
   def logout
     JwtCookieService.clear_cookie(cookies)
-    render json: { message: 'Successfully logged out' }, status: :no_content
+    head :no_content
   end
 
   private
