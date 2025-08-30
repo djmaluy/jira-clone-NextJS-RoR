@@ -41,8 +41,7 @@ class WorkspacesController < ApplicationController
   end
 
   def destroy
-    workspace.destroy
-    head :no_content
+    render json: { message: 'Successfully deleted' }, status: :no_content if workspace.destroy
   end
 
 
