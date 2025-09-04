@@ -13,6 +13,7 @@ export type TTask = {
   projectId: string;
   status: TaskStatus;
   assigneeId: string;
+  position: number;
   description?: string;
   projectName?: string;
   assigneeName?: string;
@@ -21,12 +22,13 @@ export type TTask = {
 };
 
 export type TTaskReq = {
-  name: string;
-  workspaceId: string;
-  projectId: string;
+  name?: string;
+  workspaceId?: string;
+  projectId?: string;
   status: TaskStatus;
-  assigneeId: string;
-  dueDate: string | Date;
+  assigneeId?: string;
+  dueDate?: string | Date;
+  position?: number;
 };
 
 export type TCreateTaskRes = {

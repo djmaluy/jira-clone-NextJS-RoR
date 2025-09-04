@@ -1,4 +1,4 @@
-json.extract! task, :id, :name, :status, :description
+json.extract! task, :id, :name, :status, :description, :position
 json.workspaceId task.workspace_id
 json.dueDate task.due_date
 json.projectId task.project_id.to_s
