@@ -75,6 +75,7 @@ export const updateTask = async (
     assigneeId,
     dueDate,
     position,
+    description,
   } = task;
   const preparedData = {
     task: {
@@ -85,6 +86,7 @@ export const updateTask = async (
       assignee_id: assigneeId,
       due_date: dueDate,
       position,
+      description,
     },
   };
   const res = await api.put<TCreateTaskRes>(

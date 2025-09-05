@@ -19,9 +19,8 @@ export function useUpdateTask() {
       if (!("position" in variables.data)) {
         toast.success("Successfully updated");
       }
-      queryClient.invalidateQueries({
-        queryKey: ["tasks"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["task"] });
     },
     onError: (error) => {
       const backendMessage = error.response?.data?.error;
