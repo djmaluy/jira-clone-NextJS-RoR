@@ -4,6 +4,7 @@ class Project < ApplicationRecord
 
   default_scope { order(created_at: :desc) }
 
+  has_many :tasks
   belongs_to :workspace
   has_one_attached :image
 

@@ -1,19 +1,24 @@
 "use client";
 
 import { Loader, PlusIcon } from "lucide-react";
+import { useQueryState } from "nuqs";
+import { useCallback } from "react";
 
 import { DottedSeparator } from "@/components/dotted-separator";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWorkspaceId } from "@/features/workspaces/hooks/useWorkspaceId";
-import { useQueryState } from "nuqs";
-import { useTaskFilters } from "../hooks/use-task-filters";
-import { useCreateTaskModal } from "../hooks/useCreateTaskModal";
-import { useFetchTasks } from "../hooks/useFetchTasks";
+import { TaskStatus } from "@/types/tasks";
+
 import { columns } from "./columns";
 import { DataFilters } from "./data-filters";
 import { DataKanban } from "./data-kanban";
 import { DataTable } from "./data-table";
+
+import { useTaskFilters } from "../hooks/use-task-filters";
+import { useCreateTaskModal } from "../hooks/useCreateTaskModal";
+import { useFetchTasks } from "../hooks/useFetchTasks";
+import { useUpdateTask } from "../hooks/useUpdateTask";
 
 const TaskViewSwitcher = () => {
   const [{ status, projectId, assigneeId, dueDate }] = useTaskFilters();
@@ -21,14 +26,28 @@ const TaskViewSwitcher = () => {
     defaultValue: "table",
   });
   const { open } = useCreateTaskModal();
+  const { mutate: update } = useUpdateTask();
   const workspaceId = useWorkspaceId();
-  const { tasks, isPending } = useFetchTasks({
+  const { tasks, flatTasks, isPending } = useFetchTasks({
     workspaceId,
     status,
     projectId,
     assigneeId,
     dueDate,
   });
+
+  const onKanbanChange = useCallback(
+    (task: { id: string; status: TaskStatus; position: number }) => {
+      update({
+        data: {
+          status: task.status,
+          position: task.position,
+        },
+        id: task.id as string,
+      });
+    },
+    [update]
+  );
 
   return (
     <Tabs
@@ -64,10 +83,12 @@ const TaskViewSwitcher = () => {
         ) : (
           <>
             <TabsContent className="mt-0" value="table">
-              <DataTable columns={columns} data={tasks ?? []} />
+              <DataTable columns={columns} data={flatTasks ?? []} />
             </TabsContent>
             <TabsContent className="mt-0" value="kanban">
-              <DataKanban data={tasks ?? []} />
+              {tasks && (
+                <DataKanban onChange={onKanbanChange} data={{ tasks }} />
+              )}
             </TabsContent>
             <TabsContent className="mt-0" value="calendar">
               Data calendar

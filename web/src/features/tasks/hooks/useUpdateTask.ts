@@ -1,6 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { TCreateTaskRes, TTaskReq } from "@/types/tasks";
@@ -9,7 +8,6 @@ import { updateTask } from "../api/taskApi";
 
 export function useUpdateTask() {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation<
     TCreateTaskRes,
@@ -17,10 +15,14 @@ export function useUpdateTask() {
     { id: string; data: TTaskReq }
   >({
     mutationFn: ({ data, id }) => updateTask(data, id),
-    onSuccess: () => {
-      toast.success("Successfully updated");
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      router.refresh();
+    onSuccess: (_res, variables) => {
+      if (!("position" in variables.data)) {
+        console.log(variables);
+        toast.success("Successfully updated");
+      }
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+      });
     },
     onError: (error) => {
       const backendMessage = error.response?.data?.error;

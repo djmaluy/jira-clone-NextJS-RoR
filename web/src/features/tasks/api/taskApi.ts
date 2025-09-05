@@ -1,9 +1,14 @@
 import { api } from "@/lib/apiClient";
-import { TCreateTaskRes, TTask, TTaskReq } from "@/types/tasks";
+import { TCreateTaskRes, TTaskReq } from "@/types/tasks";
 
+import { TasksByStatus } from "../components/data-kanban";
 import { TUseFetchTasksProps } from "../hooks/useFetchTasks";
 
 const API_TASKS_URL = "/tasks";
+
+export type TasksApiResponse = {
+  tasks: TasksByStatus;
+};
 
 export const createTask = async (task: TTaskReq): Promise<TCreateTaskRes> => {
   const { name, workspaceId, projectId, status, assigneeId, dueDate } = task;
@@ -45,7 +50,7 @@ export const fetchTasks = async ({
   if (dueDate) searchParams.append("due_date", dueDate);
   if (workspaceId) searchParams.append("workspace_id", workspaceId);
 
-  const res = await api.get<TTask[]>(
+  const res = await api.get<TasksApiResponse>(
     `${API_TASKS_URL}?${searchParams.toString()}`
   );
 
@@ -62,7 +67,15 @@ export const updateTask = async (
   task: TTaskReq,
   id: string
 ): Promise<TCreateTaskRes> => {
-  const { name, workspaceId, projectId, status, assigneeId, dueDate } = task;
+  const {
+    name,
+    workspaceId,
+    projectId,
+    status,
+    assigneeId,
+    dueDate,
+    position,
+  } = task;
   const preparedData = {
     task: {
       name,
@@ -71,6 +84,7 @@ export const updateTask = async (
       status,
       assignee_id: assigneeId,
       due_date: dueDate,
+      position,
     },
   };
   const res = await api.put<TCreateTaskRes>(
