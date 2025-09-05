@@ -25,10 +25,11 @@ export type TTaskReq = {
   name?: string;
   workspaceId?: string;
   projectId?: string;
-  status: TaskStatus;
+  status?: TaskStatus;
   assigneeId?: string;
   dueDate?: string | Date;
   position?: number;
+  description?: string;
 };
 
 export type TCreateTaskRes = {

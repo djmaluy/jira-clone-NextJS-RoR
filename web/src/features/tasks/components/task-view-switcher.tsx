@@ -21,7 +21,11 @@ import { useCreateTaskModal } from "../hooks/useCreateTaskModal";
 import { useFetchTasks } from "../hooks/useFetchTasks";
 import { useUpdateTask } from "../hooks/useUpdateTask";
 
-const TaskViewSwitcher = () => {
+type TTaskViewSwitcherProps = {
+  hideProjectFilters?: boolean;
+};
+
+const TaskViewSwitcher = ({ hideProjectFilters }: TTaskViewSwitcherProps) => {
   const [{ status, projectId, assigneeId, dueDate }] = useTaskFilters();
   const [view, setView] = useQueryState("task-view", {
     defaultValue: "table",
@@ -75,7 +79,7 @@ const TaskViewSwitcher = () => {
           </Button>
         </div>
         <DottedSeparator className="my-4" />
-        <DataFilters />
+        <DataFilters hideProjectFilters={hideProjectFilters} />
         <DottedSeparator className="my-4" />
         {isPending ? (
           <div className="w-full border rounded-lg h-[200px] flex flex-col items-center justify-center">

@@ -3,4 +3,5 @@ json.workspaceId task.workspace_id
 json.dueDate task.due_date
 json.projectId task.project_id.to_s
 json.assigneeId task.assignee_id.to_s
+json.assigneeName task.assignee.name
 json.projectName task.project.name
