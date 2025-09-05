@@ -17,7 +17,6 @@ export function useUpdateTask() {
     mutationFn: ({ data, id }) => updateTask(data, id),
     onSuccess: (_res, variables) => {
       if (!("position" in variables.data)) {
-        console.log(variables);
         toast.success("Successfully updated");
       }
       queryClient.invalidateQueries({

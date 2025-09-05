@@ -11,6 +11,7 @@ import { useWorkspaceId } from "@/features/workspaces/hooks/useWorkspaceId";
 import { TaskStatus } from "@/types/tasks";
 
 import { columns } from "./columns";
+import { DataCalendar } from "./data-calendar";
 import { DataFilters } from "./data-filters";
 import { DataKanban } from "./data-kanban";
 import { DataTable } from "./data-table";
@@ -90,8 +91,8 @@ const TaskViewSwitcher = () => {
                 <DataKanban onChange={onKanbanChange} data={{ tasks }} />
               )}
             </TabsContent>
-            <TabsContent className="mt-0" value="calendar">
-              Data calendar
+            <TabsContent className="mt-0 h-full pb-4" value="calendar">
+              <DataCalendar data={flatTasks ?? []} />
             </TabsContent>
           </>
         )}

@@ -18,7 +18,7 @@ export type TTask = {
   projectName?: string;
   assigneeName?: string;
   projectImg?: string;
-  dueDate?: string | Date;
+  dueDate: string | Date;
 };
 
 export type TTaskReq = {
