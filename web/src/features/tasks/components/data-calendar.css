@@ -1,0 +1,50 @@
+.rbc-header {
+  font-size: 0.875rem;
+  font-weight: 400;
+  padding-bottom: 1rem;
+  color: var(--muted-foreground, #6b7280);
+  border-bottom: 0;
+}
+
+.rbc-header + .rbc-header {
+  border-left-width: 0;
+}
+
+.rbc-button-link {
+  font-weight: 400;
+  color: var(--muted-foreground, #6b7280);
+  font-size: 0.875rem;
+}
+
+.rbc-month-row {
+  min-height: 180px;
+  border-top-style: var(--tw-border-style);
+  border-top-width: 1px;
+  border-left-width: 1px;
+  border-right-width: 1px;
+}
+
+:not(.rbc-month-row ~ .rbc-month-row).rbc-month-row {
+  border-top-right-radius: calc(var(--radius));
+  border-top-left-radius: calc(var(--radius));
+}
+
+.rbc-month-row:last-of-type {
+  border-bottom-style: var(--tw-border-style);
+  border-bottom-width: 1px;
+
+  border-bottom-right-radius: calc(var(--radius));
+  border-bottom-left-radius: calc(var(--radius));
+}
+
+.rbc-month-view {
+  border: none;
+}
+
+.rbc-date-cell {
+  padding: 8px;
+}
+
+.rbc-off-range-bg {
+  background: inherit;
+}
