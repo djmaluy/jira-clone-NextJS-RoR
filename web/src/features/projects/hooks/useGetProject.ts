@@ -1,19 +1,18 @@
-import { getWorkspace } from "@/features/workspaces/api/workspaceApi";
 import { useQuery } from "@tanstack/react-query";
 
+import { useWorkspaceId } from "@/features/workspaces/hooks/useWorkspaceId";
+import { getProject } from "../api/projectApi";
+
 export function useGetProject(id: string) {
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["projects", id],
-    queryFn: async ({ queryKey }) => {
-      const [, workspaceId] = queryKey;
-      return await getWorkspace(workspaceId as string);
-    },
-    enabled: !!id,
+  const workspaceId = useWorkspaceId();
+
+  const { data, isPending } = useQuery({
+    queryKey: ["project", id],
+    queryFn: async () => getProject(workspaceId as string, id),
   });
 
   return {
-    workspace: data,
+    project: data,
     isPending,
-    isError,
   };
 }

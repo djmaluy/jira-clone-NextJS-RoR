@@ -1,7 +1,6 @@
 import { api } from "@/lib/apiClient";
+import { apiUrls, routes } from "@/lib/routes";
 import { TMemberRes, TUpdateRoleRes } from "@/types/members";
-
-const API_MEMBERS_URL = "/members";
 
 export const updateMember = async (
   workspaceId: string,
@@ -9,7 +8,7 @@ export const updateMember = async (
   role: string
 ): Promise<TUpdateRoleRes> => {
   const res = await api.put<TUpdateRoleRes>(
-    `/workspaces/${workspaceId}${API_MEMBERS_URL}/${userId}`,
+    `${routes.WORKSPACES}/${workspaceId}${apiUrls.MEMBERS}/${userId}`,
     { role }
   );
   return res.data;
@@ -17,14 +16,14 @@ export const updateMember = async (
 
 export const fetchMembers = async (workspaceId: string) => {
   const res = await api.get<TMemberRes[]>(
-    `/workspaces/${workspaceId}${API_MEMBERS_URL}`
+    `${routes.WORKSPACES}/${workspaceId}${apiUrls.MEMBERS}`
   );
   return res.data;
 };
 
 export const deleteMember = async (workspaceId: string, userId: string) => {
   const res = await api.delete<{ message: string }>(
-    `/workspaces/${workspaceId}${API_MEMBERS_URL}/${userId}`
+    `${routes.WORKSPACES}/${workspaceId}${apiUrls.MEMBERS}/${userId}`
   );
   return res.data;
 };

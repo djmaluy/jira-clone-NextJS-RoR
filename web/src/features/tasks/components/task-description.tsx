@@ -5,6 +5,7 @@ import { DottedSeparator } from "@/components/dotted-separator";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { TTask } from "@/types/tasks";
+
 import { useUpdateTask } from "../hooks/useUpdateTask";
 
 type TTAskDescriptionProps = {
@@ -18,12 +19,17 @@ export const TaskDescription = ({ task }: TTAskDescriptionProps) => {
   const { mutate, isPending } = useUpdateTask();
 
   const handleSave = () => {
-    mutate({
-      data: {
-        description: value,
+    mutate(
+      {
+        data: {
+          description: value,
+        },
+        id: task.id as string,
       },
-      id: task.id as string,
-    });
+      {
+        onSuccess: () => setIsEditing(false),
+      }
+    );
   };
 
   return (

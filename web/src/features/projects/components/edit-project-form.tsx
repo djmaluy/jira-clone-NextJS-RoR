@@ -1,5 +1,12 @@
 "use client";
 
+import { ArrowLeftIcon, ImageIcon } from "lucide-react";
+import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
+import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { DottedSeparator } from "@/components/dotted-separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -15,24 +22,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { useConfirm } from "@/hooks/use-confirm";
 import { fileToBase64 } from "@/lib/fileToBase64";
+import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import { TWorkspace } from "@/types/workspace";
+import { TProjectRes } from "@/types/project";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeftIcon, ImageIcon } from "lucide-react";
-import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
-import { useRef } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+
 import { useDeleteProject } from "../hooks/useDeleteProject";
 import { useUpdateProject } from "../hooks/useUpdateProject";
 
 type TEditProjectForm = {
   onCancel?: () => void;
-  initialValues: TWorkspace;
+  initialValues: TProjectRes;
 };
 
-const updateWorkspaceSchema = z.object({
+const updateProjectSchema = z.object({
   name: z.string().min(1, "Must be 1 or more characters"),
   image: z
     .union([
@@ -60,15 +63,15 @@ export const EditProjectForm = ({
     "destructive"
   );
 
-  const form = useForm<z.infer<typeof updateWorkspaceSchema>>({
-    resolver: zodResolver(updateWorkspaceSchema),
+  const form = useForm<z.infer<typeof updateProjectSchema>>({
+    resolver: zodResolver(updateProjectSchema),
     defaultValues: {
       ...initialValues,
       image: initialValues.image || "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof updateWorkspaceSchema>) => {
+  const onSubmit = async (values: z.infer<typeof updateProjectSchema>) => {
     let imageBase64 = "";
 
     if (values.image instanceof File) {
@@ -111,7 +114,7 @@ export const EditProjectForm = ({
     if (onCancel) {
       onCancel();
     } else {
-      router.push(`/workspaces/${initialValues.id}`);
+      router.push(`${routes.WORKSPACES}/${initialValues.id}`);
     }
   };
 
