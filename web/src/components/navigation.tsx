@@ -1,7 +1,5 @@
 "use client";
 
-import { useWorkspaceId } from "@/features/workspaces/hooks/useWorkspaceId";
-import { cn } from "@/lib/utils";
 import { SettingsIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,7 +10,11 @@ import {
   GoHomeFill,
 } from "react-icons/go";
 
-const routes = [
+import { useWorkspaceId } from "@/features/workspaces/hooks/useWorkspaceId";
+import { routes } from "@/lib/routes";
+import { cn } from "@/lib/utils";
+
+const navItems = [
   {
     label: "Home",
     href: "",
@@ -21,19 +23,19 @@ const routes = [
   },
   {
     label: "My tasks",
-    href: "/tasks",
+    href: routes.TASKS,
     icon: GoCheckCircle,
     activeIcon: GoCheckCircleFill,
   },
   {
     label: "Settings",
-    href: "/settings",
+    href: routes.SETTINGS,
     icon: SettingsIcon,
     activeIcon: SettingsIcon,
   },
   {
     label: "Members",
-    href: "/members",
+    href: routes.MEMBERS,
     icon: UsersIcon,
     activeIcon: UsersIcon,
   },
@@ -45,8 +47,8 @@ export const Navigation = () => {
 
   return (
     <ul className="flex flex-col">
-      {routes.map((item) => {
-        const fullHref = `/workspaces/${workspaceId}${item.href}`;
+      {navItems.map((item) => {
+        const fullHref = `${routes.WORKSPACES}/${workspaceId}${item.href}`;
         const isActive = pathname === fullHref;
         const Icon = isActive ? item.activeIcon : item.icon;
 

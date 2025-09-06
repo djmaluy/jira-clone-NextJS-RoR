@@ -1,5 +1,13 @@
 "use client";
 
+import { ArrowLeftIcon, CopyIcon, ImageIcon } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useRef } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
 import { DottedSeparator } from "@/components/dotted-separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -18,13 +26,7 @@ import { fileToBase64 } from "@/lib/fileToBase64";
 import { cn } from "@/lib/utils";
 import { TWorkspace } from "@/types/workspace";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeftIcon, CopyIcon, ImageIcon } from "lucide-react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useRef } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+
 import { useDeleteWorkspace } from "../hooks/useDeleteWorkspace";
 import { useResetInvitationCode } from "../hooks/useResetInviteCode";
 import { useUpdateWorkspace } from "../hooks/useUpdateWorkspace";
@@ -127,11 +129,7 @@ export const EditWorkspaceForm = ({
     const confirmed = await confirmReset();
 
     if (confirmed) {
-      resetCode(initialValues.id, {
-        onSuccess: () => {
-          router.refresh();
-        },
-      });
+      resetCode(initialValues.id);
     }
   };
 

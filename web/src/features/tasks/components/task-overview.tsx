@@ -1,14 +1,16 @@
-import { TTask } from "@/types/tasks";
+import { PencilIcon } from "lucide-react";
 
 import { DottedSeparator } from "@/components/dotted-separator";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
 import { snakeCaseToTitleCase } from "@/lib/utils";
-import { PencilIcon } from "lucide-react";
-import { useEditTaskModal } from "../hooks/useEditTaskModal";
+import { TTask } from "@/types/tasks";
+
 import { TaskDate } from "./due-date";
 import { OverviewPropery } from "./overview-property";
+
+import { useEditTaskModal } from "../hooks/useEditTaskModal";
 
 type TTaskOverviewProps = {
   task: TTask;

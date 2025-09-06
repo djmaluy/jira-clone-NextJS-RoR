@@ -1,8 +1,9 @@
-import { getWorkspace } from "@/features/workspaces/api/workspaceApi";
 import { useQuery } from "@tanstack/react-query";
 
+import { getWorkspace } from "@/features/workspaces/api/workspaceApi";
+
 export function useGetWorkspace(id: string) {
-  const { data, isPending, isError } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["workspace", id],
     queryFn: async ({ queryKey }) => {
       const [, workspaceId] = queryKey;
@@ -14,6 +15,5 @@ export function useGetWorkspace(id: string) {
   return {
     workspace: data,
     isPending,
-    isError,
   };
 }
