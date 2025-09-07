@@ -3,12 +3,14 @@
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";
 
+import { Analytics } from "@/components/analytics";
 import { PageError } from "@/components/page-error";
 import { PageLoader } from "@/components/page-loader";
 import { Button } from "@/components/ui/button";
 import { ProjectAvatar } from "@/features/projects/components/project_avatar";
 import { useProjectId } from "@/features/projects/hooks/use-project-id";
 import { useGetProject } from "@/features/projects/hooks/useGetProject";
+import { useGetProjectAnalytics } from "@/features/projects/hooks/useGetProjectAnalytics";
 import TaskViewSwitcher from "@/features/tasks/components/task-view-switcher";
 import { useWorkspaceId } from "@/features/workspaces/hooks/useWorkspaceId";
 import { routes } from "@/lib/routes";
@@ -17,14 +19,18 @@ export const ProjectIdClient = () => {
   const projectId = useProjectId();
   const workspaceId = useWorkspaceId();
   const { project, isPending } = useGetProject(projectId);
+  const { projectAnalytics, isPending: isAnalyticsPending } =
+    useGetProjectAnalytics(projectId);
 
-  if (isPending) {
+  if (isPending || isAnalyticsPending) {
     return <PageLoader />;
   }
 
   if (!project) {
     return <PageError message="Page not found" />;
   }
+
+  console.log(projectAnalytics, "======>");
 
   return (
     <div className="flex flex-col gap-y-4">
@@ -48,6 +54,7 @@ export const ProjectIdClient = () => {
           </Button>
         </div>
       </div>
+      {projectAnalytics ? <Analytics data={projectAnalytics} /> : null}
       <TaskViewSwitcher hideProjectFilters />
     </div>
   );

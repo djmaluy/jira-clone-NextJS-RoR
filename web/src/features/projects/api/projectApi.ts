@@ -57,3 +57,14 @@ export const deleteProject = async (workspaceId: string, projectId: string) => {
 
   return res.data;
 };
+
+export const getProjectAnalytics = async (
+  workspaceId: string,
+  projectId: string
+) => {
+  const res = await api.get(
+    `${apiUrls.WORKSPACES}/${workspaceId}${apiUrls.PROJECTS}/${projectId}/${apiUrls.PROJECT_ANALYTICS}`
+  );
+
+  return res.data;
+};
