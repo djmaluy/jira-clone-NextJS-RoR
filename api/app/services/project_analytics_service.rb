@@ -1,62 +1,70 @@
 class ProjectAnalyticsService
+  CURRENT_MONTH_RANGE = Time.current.beginning_of_month..Time.current.end_of_month
+  LAST_MONTH_RANGE = 1.month.ago.beginning_of_month..1.month.ago.end_of_month
+
   def initialize(project)
     @project = project
-    @tasks = @project.tasks
   end
 
   def call
     {
-      taskCount: current_month_tasks.size,
-      taskDifference: task_difference,
-      assignedTaskCount: current_month_tasks.where.not(assignee_id: nil).size,
-      assignedTaskDifference: assigned_task_difference,
-      incompletedTaskCount: current_month_tasks.where.not(status: :done).size,
-      incompletedTaskDifference: incompleted_task_difference,
-      completedTaskCount: current_month_tasks.where(status: :done).size,
-      completedTaskDifference: completed_task_difference,
-      overdueTaskCount: current_month_tasks.where("due_date < ?", Time.current).where.not(status: :done).size,
-      overdueTaskDifference: overdue_task_difference
+      taskCount: current_tasks.size,
+      taskDifference: current_tasks.size - last_tasks.size,
+      assignedTaskCount: current_assigned_tasks.size,
+      assignedTaskDifference: current_assigned_tasks.size - last_assigned_tasks.size,
+      incompletedTaskCount: current_incomplete_tasks.size,
+      incompletedTaskDifference: current_incomplete_tasks.size - last_incomplete_tasks.size,
+      completedTaskCount: current_completed_tasks.size,
+      completedTaskDifference: current_completed_tasks.size - last_completed_tasks.size,
+      overdueTaskCount: current_overdue_tasks.size,
+      overdueTaskDifference: current_overdue_tasks.size - last_overdue_tasks.size
     }
   end
 
-
+  
   private
 
-  def current_month_tasks
-    @tasks.where(created_at: Time.current.beginning_of_month..Time.current.end_of_month)
+  def current_tasks
+    @current_tasks ||= @project.tasks.where(created_at: CURRENT_MONTH_RANGE)
   end
 
-  def last_month_tasks
-    @tasks.where(created_at: 1.month.ago.beginning_of_month..1.month.ago.end_of_month)
+  def last_tasks
+    @last_tasks ||= @project.tasks.where(created_at: LAST_MONTH_RANGE)
   end
 
-  def task_difference
-    current_month_tasks.size - last_month_tasks.size
+  def current_assigned_tasks
+    @current_assigned_tasks ||= current_tasks.select { |t| t.assignee_id.present? }
   end
 
-  def assigned_task_difference
-    current_month_tasks.where.not(assignee_id: nil).size -
-      last_month_tasks.where.not(assignee_id: nil).size
+  def last_assigned_tasks
+    @last_assigned_tasks ||= last_tasks.select { |t| t.assignee_id.present? }
   end
 
-  def completed_task_difference
-    current_month_tasks.where(status: :done).size -
-      last_month_tasks.where(status: :done).size
+  def current_completed_tasks
+    @current_completed_tasks ||= current_tasks.select { |t| t.status == 'done' }
   end
 
-  def incompleted_task_difference
-    current_month_tasks.where.not(status: :done).size -
-      last_month_tasks.where.not(status: :done).size
+  def last_completed_tasks
+    @last_completed_tasks ||= last_tasks.select { |t| t.status == 'done' }
   end
 
-  def overdue_task_difference
-    current_month_tasks
-      .where("due_date < ?", Time.current)
-      .where.not(status: :done)
-      .count -
-    last_month_tasks
-      .where("due_date < ?", Time.current)
-      .where.not(status: :done)
-      .count
+  def current_incomplete_tasks
+    @current_incomplete_tasks ||= current_tasks.select { |t| t.status != 'done' }
+  end
+
+  def last_incomplete_tasks
+    @last_incomplete_tasks ||= last_tasks.select { |t| t.status != 'done' }
+  end
+
+  def current_overdue_tasks
+    @current_overdue_tasks ||= current_tasks.select do |t|
+      t.due_date.present? && t.due_date < Time.current && t.status != 'done'
+    end
+  end
+
+  def last_overdue_tasks
+    @last_overdue_tasks ||= last_tasks.select do |t|
+      t.due_date.present? && t.due_date < 1.month.ago.end_of_month && t.status != 'done'
+    end
   end
 end

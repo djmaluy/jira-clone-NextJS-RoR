@@ -5,5 +5,7 @@ class ProjectAnalyticsController < ApplicationController
   def show
     analytics = ProjectAnalyticsService.new(project).call
     render json: analytics, status: :ok
+  rescue => e
+    render json: { error: 'Analytics calculation failed' }, status: :unprocessable_entity
   end
 end
