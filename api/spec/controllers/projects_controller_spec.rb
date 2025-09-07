@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe ProjectsController, type: :controller do
   let(:user) { create(:user) }
   let!(:workspace) { create(:workspace) }
-  let!(:project)   { create(:project, workspace: workspace) }
+  let!(:project) { create(:project, workspace: workspace) }
 
   before do
     allow(controller).to receive(:current_user).and_return(user)

@@ -24,3 +24,18 @@ export type TProjectRes = {
   workspaceId: string;
   image?: string;
 };
+
+export type TProjectAnalyticsRes = {
+  taskCount: number;
+  taskDifference: number;
+  projectCount?: number;
+  projectDifference?: number;
+  incompletedTaskCount?: number;
+  incompletedTaskDifference?: number;
+  assignedTaskCount: number;
+  assignedTaskDifference: number;
+  completedTaskCount: number;
+  completedTaskDifference: number;
+  overdueTaskCount: number;
+  overdueTaskDifference: number;
+};

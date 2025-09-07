@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   scope :api, defaults: { format: :json } do
     resources :workspaces do
       resources :members, only: %i[update destroy index]
-      resources :projects, only: %i[create update index show]
+      resources :projects, only: %i[create update index show] do
+        resource :analytics, only: :show, controller: "project_analytics"
+      end
       resource :invitation, only: %i[create update]
     end
     
