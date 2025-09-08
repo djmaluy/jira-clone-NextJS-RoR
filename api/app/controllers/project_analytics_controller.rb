@@ -3,7 +3,7 @@ class ProjectAnalyticsController < ApplicationController
   expose :project, ->{ workspace.projects.find(params[:project_id]) }
 
   def show
-    analytics = ProjectAnalyticsService.new(project).call
+    analytics = BaseAnalyticsService.new(project).call
     render json: analytics, status: :ok
   rescue => e
     render json: { error: 'Analytics calculation failed' }, status: :unprocessable_entity
