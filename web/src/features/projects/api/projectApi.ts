@@ -63,7 +63,7 @@ export const getProjectAnalytics = async (
   projectId: string
 ) => {
   const res = await api.get(
-    `${apiUrls.WORKSPACES}/${workspaceId}${apiUrls.PROJECTS}/${projectId}/${apiUrls.PROJECT_ANALYTICS}`
+    `${apiUrls.WORKSPACES}/${workspaceId}${apiUrls.PROJECTS}/${projectId}${apiUrls.PROJECT_ANALYTICS}`
   );
 
   return res.data;

@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   expose :workspace, ->{ Workspace.find(params[:workspace_id]) }
-  expose :projects, ->{ workspace.projects }
+  expose :projects, ->{ workspace.projects.includes([:image_attachment]) }
   expose :project, ->{
     if params[:id]
       workspace.projects.find(params[:id])

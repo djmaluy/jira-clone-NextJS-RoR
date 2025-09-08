@@ -4,7 +4,7 @@ class Project < ApplicationRecord
 
   default_scope { order(created_at: :desc) }
 
-  has_many :tasks
+  has_many :tasks, dependent: :destroy
   belongs_to :workspace
   has_one_attached :image
 
