@@ -6,6 +6,7 @@ class TasksController < ApplicationController
         .by_project(params[:project_id])
         .by_status(params[:status])
         .by_due_date(params[:due_date])
+        .includes(:assignee, project: { image_attachment: :blob })
   }
 
   def index

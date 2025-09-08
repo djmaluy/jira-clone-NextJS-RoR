@@ -3,9 +3,10 @@ Rails.application.routes.draw do
     resources :workspaces do
       resources :members, only: %i[update destroy index]
       resources :projects, only: %i[create update index show] do
-        resource :analytics, only: :show, controller: "project_analytics"
+        resource :project_analytics, only: :show
       end
       resource :invitation, only: %i[create update]
+      resource :workspace_analytics, only: :show
     end
     
     resources :tasks, only: %i[create index destroy show update]

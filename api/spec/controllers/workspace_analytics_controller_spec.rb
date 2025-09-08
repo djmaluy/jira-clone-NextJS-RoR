@@ -1,4 +1,4 @@
-RSpec.describe ProjectAnalyticsController, type: :controller do
+RSpec.describe WorkspaceAnalyticsController, type: :controller do
   let(:user) { create(:user) }
   let!(:workspace) { create(:workspace) }
   let!(:project) { create(:project, workspace: workspace) }
@@ -10,14 +10,15 @@ RSpec.describe ProjectAnalyticsController, type: :controller do
 
   describe "GET #show" do
     it "returns success" do
-      get :show, params: { workspace_id: workspace.id, project_id: project.id }, format: :json
+      
+      get :show, params: { workspace_id: workspace.id }, format: :json
       expect(response).to have_http_status(:ok)
     end
 
     it "returns error" do 
       other_workspace = create(:workspace)
 
-      get :show, params: { workspace_id: other_workspace.id, project_id: project.id }, format: :json
+      get :show, params: { workspace_id: other_workspace.id }, format: :json
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end

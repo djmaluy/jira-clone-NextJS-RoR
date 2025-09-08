@@ -15,5 +15,6 @@ export const apiUrls = {
   PROJECTS: "/projects",
   WORKSPACES: "/workspaces",
   MEMBERS: "/members",
-  PROJECT_ANALYTICS: "/analytics",
+  PROJECT_ANALYTICS: "/project_analytics",
+  WORKSPACE_ANALYTICS: "/workspace_analytics",
 };

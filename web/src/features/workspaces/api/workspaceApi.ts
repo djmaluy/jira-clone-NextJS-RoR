@@ -1,4 +1,5 @@
 import { api } from "@/lib/apiClient";
+import { apiUrls } from "@/lib/routes";
 import { TWorkspace, TWorkspaceReq } from "@/types/workspace";
 
 export const API_WORKSPACES_URL = "/workspaces";
@@ -42,6 +43,14 @@ export const resetInvitationCode = async (id: number) => {
 export const joinWorkspace = async (id: number, invitationCode: string) => {
   const res = await api.post(
     `${API_WORKSPACES_URL}/${id}/invitation?invitation_code=${invitationCode}`
+  );
+
+  return res.data;
+};
+
+export const getWorkspaceAnalytics = async (workspaceId: string) => {
+  const res = await api.get(
+    `${apiUrls.WORKSPACES}/${workspaceId}${apiUrls.WORKSPACE_ANALYTICS}`
   );
 
   return res.data;

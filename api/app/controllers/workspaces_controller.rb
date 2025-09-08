@@ -1,8 +1,8 @@
 class WorkspacesController < ApplicationController
-  expose :workspaces, ->{ current_user.workspaces }
+  expose :workspaces, ->{ current_user.workspaces.includes([:image_attachment]) }
   expose :workspace, ->{
     if params[:id]
-      Workspace.find(params[:id])
+      Workspace.includes([:tasks]).find(params[:id])
     else
       Workspace.new(workspace_params.except(:image))
     end

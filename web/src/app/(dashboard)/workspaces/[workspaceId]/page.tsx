@@ -1,5 +1,7 @@
+import { WorkspaceIdClient } from "./client";
+
 const WorkspaceIdPage = () => {
-  return <div>WorkspaceIdPage</div>;
+  return <WorkspaceIdClient />;
 };
 
 export default WorkspaceIdPage;

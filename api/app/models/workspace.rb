@@ -7,6 +7,7 @@ class Workspace < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
   has_many :projects, dependent: :destroy
+  has_many :tasks, through: :projects
   has_one_attached :image
   
   validates :name, presence: true
