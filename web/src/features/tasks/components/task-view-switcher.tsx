@@ -16,6 +16,7 @@ import { DataFilters } from "./data-filters";
 import { DataKanban } from "./data-kanban";
 import { DataTable } from "./data-table";
 
+import { useProjectId } from "@/features/projects/hooks/use-project-id";
 import { useTaskFilters } from "../hooks/use-task-filters";
 import { useCreateTaskModal } from "../hooks/useCreateTaskModal";
 import { useFetchTasks } from "../hooks/useFetchTasks";
@@ -33,10 +34,11 @@ const TaskViewSwitcher = ({ hideProjectFilters }: TTaskViewSwitcherProps) => {
   const { open } = useCreateTaskModal();
   const { mutate: update } = useUpdateTask();
   const workspaceId = useWorkspaceId();
+  const paramProjectId = useProjectId();
   const { tasks, flatTasks, isPending } = useFetchTasks({
     workspaceId,
     status,
-    projectId,
+    projectId: paramProjectId ?? projectId,
     assigneeId,
     dueDate,
   });
