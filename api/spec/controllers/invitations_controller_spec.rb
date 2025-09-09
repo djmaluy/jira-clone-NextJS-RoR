@@ -27,6 +27,21 @@ RSpec.describe InvitationsController, type: :controller do
       json_respose = JSON.parse(response.body)
       expect(json_respose['invitation_code']).to eq(workspace.reload.invitation_code)
     end
+
+    context "when save fails" do
+      before do
+        allow_any_instance_of(Workspace).to receive(:save).and_return(false)
+        allow_any_instance_of(Workspace).to receive_message_chain(:errors, :full_messages).and_return(["Something went wrong"])
+      end
+
+      it "returns unprocessable_entity with errors" do
+        put :update, params: { workspace_id: workspace.id }, format: :json
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        json_response = JSON.parse(response.body)
+        expect(json_response["errors"]).to include("Something went wrong")
+      end
+    end
   end
 
   describe 'POST #create' do

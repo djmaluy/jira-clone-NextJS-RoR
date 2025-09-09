@@ -129,21 +129,18 @@ RSpec.describe WorkspacesController, type: :controller do
         json_response = JSON.parse(response.body)
         expect(json_response['id']).to eq(workspace.id)
       end
+    end
 
-      context 'with base64 image' do
-        let(:base64_image) { 'data:image/png;base64,iVBORw0AAAABJRU5ErkJggg==' }
+    context 'with base64 image' do
+      let(:image_data) { "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA" }
 
-        it 'updates image when provided' do
-          allow(workspace).to receive(:attach_base64_image)
-          allow(Workspace).to receive(:find).and_return(workspace)
-          
-          put :update, params: { 
-            id: workspace.id, 
-            workspace: new_attributes.merge(image: base64_image) 
-          }, format: :json
+      it "attaches new image" do
+        expect_any_instance_of(Workspace).to receive(:attach_base64_image).with(:image, image_data)
 
-          expect(workspace).to have_received(:attach_base64_image).with(:image, base64_image)
-        end
+        patch :update, params: {
+          id: workspace.id,
+          workspace: { image: image_data }
+        }, format: :json
       end
     end
 

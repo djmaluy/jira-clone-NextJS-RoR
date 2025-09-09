@@ -29,7 +29,9 @@ class ProjectsController < ApplicationController
 
   def update
     if project.update(project_params.except(:image))
-      handle_image!
+      if params[:project][:image].present?
+        project.attach_base64_image(:image, params[:project][:image])
+      end
       render :update, formats: :json, status: :ok
     else
       render json: { errors: project.errors.full_messages }, status: :unprocessable_entity
@@ -38,18 +40,6 @@ class ProjectsController < ApplicationController
 
 
   private
-
-  def handle_image!
-    return unless params.key?(:project)
-
-    image_param = params[:project][:image]
-
-    if image_param.present?
-      project.attach_base64_image(:image, image_param)
-    else
-      project.image.purge if project.image.attached?
-    end
-  end
 
   def project_params
     params.require(:project).permit(:name, :image)

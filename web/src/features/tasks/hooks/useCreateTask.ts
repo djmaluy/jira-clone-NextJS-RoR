@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { toast } from "sonner";
 
 import { TCreateTaskRes, TTaskReq } from "@/types/tasks";
-import { AxiosError } from "axios";
-import { useRouter } from "next/navigation";
+
 import { createTask } from "../api/taskApi";
 
 export function useCreateTask() {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation<
     TCreateTaskRes,
@@ -19,7 +18,6 @@ export function useCreateTask() {
     onSuccess: () => {
       toast.success("Successfully created");
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
-      // router.push(`/workspaces/${data.workspaceId}/tasks/${data.id}`);
     },
     onError: (error) => {
       const backendMessage = error.response?.data?.error;

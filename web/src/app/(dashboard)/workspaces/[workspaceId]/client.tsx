@@ -6,18 +6,18 @@ import { Analytics } from "@/components/analytics";
 import { DottedSeparator } from "@/components/dotted-separator";
 import { PageError } from "@/components/page-error";
 import { PageLoader } from "@/components/page-loader";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
 import { useFetchMembers } from "@/features/members/hooks/useFetchMembers";
-import { useCreateProjectModal } from "@/features/projects/hooks/useCreateProjectModal";
 import { useFetchProjects } from "@/features/projects/hooks/useFetchProjects";
 import { ProjectList } from "@/features/workspaces/components/project-list";
 import { TaskList } from "@/features/workspaces/components/task-list";
 import { useGetWorkspace } from "@/features/workspaces/hooks/useGetWorkspace";
 import { useGetWorkspaceAnalytics } from "@/features/workspaces/hooks/useGetWorkspaceAnalytics";
 import { useWorkspaceId } from "@/features/workspaces/hooks/useWorkspaceId";
+import { routes } from "@/lib/routes";
 import { TMemberRes } from "@/types/members";
+import Link from "next/link";
 
 export const WorkspaceIdClient = () => {
   const workspaceId = useWorkspaceId();
@@ -49,7 +49,7 @@ export const WorkspaceIdClient = () => {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         <TaskList workspace={workspace} />
         <ProjectList projects={projects} workspaceId={workspaceId} />
-        <MembersList members={members} />
+        <MembersList members={members} workspaceId={workspaceId} />
       </div>
     </div>
   );
@@ -57,19 +57,18 @@ export const WorkspaceIdClient = () => {
 
 type TMembersListProps = {
   members: TMemberRes[];
+  workspaceId: string;
 };
 
-export const MembersList = ({ members }: TMembersListProps) => {
-  const { open: createProject } = useCreateProjectModal();
-
+export const MembersList = ({ members, workspaceId }: TMembersListProps) => {
   return (
     <div className="flex flex-col gap-y-4 col-span-1">
       <div className="bg-white border rounded-lg p-4">
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold">Members ({members.length})</p>
-          <Button variant="secondary" size="icon" onClick={createProject}>
+          <Link href={`${routes.WORKSPACES}/${workspaceId}${routes.MEMBERS}`}>
             <SettingsIcon className="size-4 text-neutral-400" />
-          </Button>
+          </Link>
         </div>
         <DottedSeparator className="my-4" />
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
