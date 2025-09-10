@@ -16,8 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { routes } from "@/lib/routes";
+import { apiUrls, routes } from "@/lib/routes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useLogin } from "../hooks/useLogin";
 
@@ -30,6 +31,7 @@ const signInFormSchema = z.object({
 
 export const SignInCard = () => {
   const { mutate: login, isPending } = useLogin();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
@@ -41,6 +43,10 @@ export const SignInCard = () => {
 
   const onSubmit = (data: z.infer<typeof signInFormSchema>) => {
     login(data);
+  };
+
+  const handleGithubLogin = () => {
+    router.push(`${process.env.NEXT_PUBLIC_API_URL}${apiUrls.OAUTH}/github`);
   };
 
   return (
@@ -107,6 +113,7 @@ export const SignInCard = () => {
           Login with Google
         </Button>
         <Button
+          onClick={handleGithubLogin}
           disabled={isPending}
           variant="secondary"
           size="lg"

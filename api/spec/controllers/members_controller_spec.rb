@@ -59,6 +59,19 @@ RSpec.describe MembersController, type: :controller do
         expect(JSON.parse(response.body)['error']).to eq('Access denied. Only workspace admin can manage members.')
       end
     end
+
+    context 'when update fails due to model validation' do
+      before do
+        allow(controller).to receive(:current_user).and_return(admin_user)
+        allow_any_instance_of(Membership).to receive(:update).and_return(false)
+      end
+
+      it 'returns unprocessable_entity 422' do
+        put :update, params: { workspace_id: workspace.id, id: member_user.id, role: 'admin' }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
   end
 
   describe 'DELETE #destroy' do
@@ -120,6 +133,20 @@ RSpec.describe MembersController, type: :controller do
 
         expect(response).to have_http_status(:forbidden)
         expect(JSON.parse(response.body)['error']).to eq('Cannot leave workspace. You are the last member.')
+      end
+    end
+
+    context 'when destroy fails due to model callback' do
+      before do
+        allow(controller).to receive(:current_user).and_return(admin_user)
+        allow_any_instance_of(Membership).to receive(:destroy).and_return(false)
+      end
+
+      it 'returns unprocessable_entity 422' do
+        delete :destroy, params: { workspace_id: workspace.id, id: member_user.id }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body)['error']).to eq('Failed to remove member')
       end
     end
   end

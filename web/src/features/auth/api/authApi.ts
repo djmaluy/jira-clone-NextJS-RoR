@@ -1,4 +1,5 @@
 import { api } from "@/lib/apiClient";
+import { apiUrls } from "@/lib/routes";
 import {
   TLoginCredentials,
   TLoginResponse,
@@ -8,9 +9,9 @@ import {
 
 export const authApi = {
   login: (data: TLoginCredentials) =>
-    api.post<TLoginResponse>("/auth/login", data),
+    api.post<TLoginResponse>(`${apiUrls.AUTH}/login`, data),
   signUp: (data: TSignUpCredentials) =>
-    api.post<TUser>("/auth/sign_up", { user: data }),
-  current: () => api.get<TUser>("/auth/current"),
-  logout: () => api.delete("/auth/logout"),
+    api.post<TUser>(`${apiUrls.AUTH}/sign_up`, { user: data }),
+  current: () => api.get<TUser>(`${apiUrls.AUTH}/current`),
+  logout: () => api.delete(`${apiUrls.AUTH}/logout`),
 };

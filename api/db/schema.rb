@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_02_160040) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_10_115518) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -83,6 +83,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_02_160040) do
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "provider"
+    t.string "provider_id"
+    t.index ["provider_id", "provider"], name: "index_users_on_provider_id_and_provider", unique: true
   end
 
   create_table "workspaces", force: :cascade do |t|
