@@ -17,4 +17,6 @@ export const apiUrls = {
   MEMBERS: "/members",
   PROJECT_ANALYTICS: "/project_analytics",
   WORKSPACE_ANALYTICS: "/workspace_analytics",
+  AUTH: "/auth",
+  OAUTH: "/oauth",
 };

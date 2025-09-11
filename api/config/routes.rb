@@ -16,7 +16,10 @@ Rails.application.routes.draw do
       post :login, to: 'auth#login'
       delete :logout, to: 'auth#logout'
       get :current, to: 'auth#current'
-      # post :google_oauth2, to: 'auth#google_oauth2'
+    end
+
+    scope :oauth do
+      get :github_callback, to: 'oauth#github_callback'
     end
   end
 end

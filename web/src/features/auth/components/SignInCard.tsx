@@ -18,8 +18,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useLogin } from "../hooks/useLogin";
+
+const GITHUB_URL = "https://github.com/login/oauth/authorize?";
 
 const signInFormSchema = z.object({
   email: z
@@ -30,6 +33,7 @@ const signInFormSchema = z.object({
 
 export const SignInCard = () => {
   const { mutate: login, isPending } = useLogin();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
@@ -41,6 +45,16 @@ export const SignInCard = () => {
 
   const onSubmit = (data: z.infer<typeof signInFormSchema>) => {
     login(data);
+  };
+
+  const handleGithubLogin = () => {
+    const state = self.crypto.randomUUID();
+    const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
+    const redirectUri = `${process.env.NEXT_PUBLIC_API_URL}/oauth/github_callback`;
+
+    router.push(
+      `${GITHUB_URL}client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`
+    );
   };
 
   return (
@@ -107,6 +121,7 @@ export const SignInCard = () => {
           Login with Google
         </Button>
         <Button
+          onClick={handleGithubLogin}
           disabled={isPending}
           variant="secondary"
           size="lg"
