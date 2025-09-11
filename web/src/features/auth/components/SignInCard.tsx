@@ -16,11 +16,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { apiUrls, routes } from "@/lib/routes";
+import { routes } from "@/lib/routes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { useLogin } from "../hooks/useLogin";
+
+const GITHUB_URL = "https://github.com/login/oauth/authorize?";
 
 const signInFormSchema = z.object({
   email: z
@@ -46,7 +48,13 @@ export const SignInCard = () => {
   };
 
   const handleGithubLogin = () => {
-    router.push(`${process.env.NEXT_PUBLIC_API_URL}${apiUrls.OAUTH}/github`);
+    const state = self.crypto.randomUUID();
+    const clientId = process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID;
+    const redirectUri = `${process.env.NEXT_PUBLIC_API_URL}/oauth/github_callback`;
+
+    router.push(
+      `${GITHUB_URL}client_id=${clientId}&redirect_uri=${redirectUri}&state=${state}`
+    );
   };
 
   return (

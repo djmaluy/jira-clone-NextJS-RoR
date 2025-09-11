@@ -19,7 +19,6 @@ Rails.application.routes.draw do
     end
 
     scope :oauth do
-      get :github, to: 'oauth#github'
       get :github_callback, to: 'oauth#github_callback'
     end
   end

@@ -1,22 +1,4 @@
 RSpec.describe OauthController, type: :controller do
-  describe "GET #github" do
-    it "redirects to GitHub OAuth URL with correct params" do
-      allow(SecureRandom).to receive(:hex).and_return("randomstate")
-
-      get :github
-
-      expect(response).to have_http_status(:redirect)
-      expect(response).to redirect_to(
-        "https://github.com/login/oauth/authorize?" +
-        {
-          client_id: ENV['GITHUB_CLIENT_ID'],
-          redirect_uri: "#{ENV['BACKEND_URL']}/api/oauth/github_callback",
-          state: "randomstate"
-        }.to_query
-      )
-    end
-  end
-
   describe "GET #github_callback" do
     let(:user) { create(:user) }
 
