@@ -15,6 +15,7 @@ gem "jbuilder"
 gem 'decent_exposure', '~> 3.0'
 gem 'dotenv'
 gem 'faraday'
+gem 'sendgrid-actionmailer'
 
 group :development, :test do
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"

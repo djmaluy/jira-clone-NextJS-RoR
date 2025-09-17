@@ -8,16 +8,15 @@ Rails.application.routes.draw do
       resource :invitation, only: %i[create update]
       resource :workspace_analytics, only: :show
     end
-    
     resources :tasks, only: %i[create index destroy show update]
-    
     scope :auth do
-      post :sign_up, to: 'auth#sign_up'
-      post :login, to: 'auth#login'
-      delete :logout, to: 'auth#logout'
-      get :current, to: 'auth#current'
+      resources :users, only: [:create] do
+        collection do
+          get :confirm_email
+        end
+      end
+      resource :session, only: [:create, :destroy, :show]
     end
-
     scope :oauth do
       get :github_callback, to: 'oauth#github_callback'
     end

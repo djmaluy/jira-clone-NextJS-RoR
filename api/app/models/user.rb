@@ -10,7 +10,7 @@ class User < ApplicationRecord
   validates :provider_id, uniqueness: { scope: :provider }, if: :oauth_user?
   validates :provider, inclusion: { in: %w[github google] }, if: :oauth_user?
 
-  before_save :normalize_email
+  before_create :confirmation_token, :normalize_email
 
   private
 
@@ -24,5 +24,11 @@ class User < ApplicationRecord
 
   def oauth_user?
     provider.present?
+  end
+
+  def confirmation_token
+    if self.confirm_token.blank?
+      self.confirm_token = SecureRandom.urlsafe_base64.to_s
+    end
   end
 end
