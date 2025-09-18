@@ -9,9 +9,9 @@ import {
 
 export const authApi = {
   login: (data: TLoginCredentials) =>
-    api.post<TLoginResponse>(`${apiUrls.AUTH}/login`, data),
+    api.post<TLoginResponse>(`${apiUrls.AUTH}/session`, data),
   signUp: (data: TSignUpCredentials) =>
-    api.post<TUser>(`${apiUrls.AUTH}/sign_up`, { user: data }),
-  current: () => api.get<TUser>(`${apiUrls.AUTH}/current`),
-  logout: () => api.delete(`${apiUrls.AUTH}/logout`),
+    api.post<TUser>(`${apiUrls.AUTH}/users`, { user: data }),
+  current: () => api.get<TUser>(`${apiUrls.AUTH}/session`),
+  logout: () => api.delete(`${apiUrls.AUTH}/session`),
 };

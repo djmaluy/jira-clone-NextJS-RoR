@@ -8,7 +8,7 @@ export async function requireUser() {
   const api = await serverApi();
 
   try {
-    const { data: user } = await api.get("/auth/current");
+    const { data: user } = await api.get("/auth/session");
     return user;
   } catch (err: unknown) {
     const error = err as AxiosError;

@@ -19,6 +19,8 @@ export function useUpdateTask() {
       if (!("position" in variables.data)) {
         toast.success("Successfully updated");
       }
+      queryClient.invalidateQueries({ queryKey: ["project-analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["workspace-analytics"] });
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["task"] });
     },

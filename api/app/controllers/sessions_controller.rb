@@ -1,17 +1,7 @@
-class AuthController < ApplicationController
-  skip_before_action :authenticate_user, only: [:login, :sign_up, :logout]
+class SessionsController < ApplicationController
+  skip_before_action :authenticate_user, only: [:create, :show, :destroy]
 
-  def sign_up
-    user = User.new(user_params)
-    #  @TODO add email confirm 
-    if user.save
-      render json: { message: 'Successfully created' }, status: :created
-    else
-      render json: { errors: user.errors }, status: :unprocessable_entity
-    end
-  end
-
-  def login
+  def create
     user = User.find_by(email: params[:email])
 
     if user&.authenticate(params[:password])
@@ -22,7 +12,7 @@ class AuthController < ApplicationController
     end
   end
 
-  def current
+  def show
     if current_user
       render json: { id: current_user.id, email: current_user.email, name: current_user.name }, status: :ok
     else
@@ -30,14 +20,8 @@ class AuthController < ApplicationController
     end
   end
 
-  def logout
+  def destroy
     JwtCookieService.clear_cookie(cookies)
     head :no_content
-  end
-
-  private
-
-  def user_params
-    params.require(:user).permit(:email, :password, :name)
   end
 end
