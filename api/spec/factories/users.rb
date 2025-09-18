@@ -5,6 +5,8 @@ FactoryBot.define do
 
     password { "password123" }
     password_confirmation { "password123" }
+    confirm_token { nil }
+    email_confirmed { false }
 
     trait :github_oauth do
       provider { "github" }

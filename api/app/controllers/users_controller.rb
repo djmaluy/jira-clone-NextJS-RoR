@@ -19,7 +19,7 @@ class UsersController < ApplicationController
       user.update_columns(confirm_token: nil, email_confirmed: true)
       redirect_to "#{ENV['FRONTEND_URL']}/sign-in"
     else
-      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: ['Invalid or expired token'] }, status: :unprocessable_entity
     end
   end
 
